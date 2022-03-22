@@ -1,0 +1,65 @@
+.container {
+  position: relative;
+  background-color: #333;
+  color: #bbb;
+  min-height: 100px;
+
+  a {
+    color: #ccc;
+  }
+
+  @include media('<mini') {
+    z-index: -1;
+  }
+}
+
+.footer {
+  width: 80%;
+  margin: 0 auto;
+  padding: 40px 0;
+  padding-left: 8%;
+  display: flex;
+
+  @include media('<mini') {
+    //width: 100%;
+    flex-direction: column;
+    padding-bottom: 80px;
+    padding-left: 0;
+  }
+}
+
+.text {
+  width: 57%;
+
+  @include media('<mini') {
+    width: 100%;
+  }
+}
+
+.slogan {
+  width: 43%;
+
+  p {
+    text-align: center;
+    font-size: 28px;
+
+    .lug {
+      font-size: 32px;
+      font-weight: 300;
+      letter-spacing: 2px;
+    }
+
+    .ustc {
+      font-weight: bold;
+
+    }
+  }
+
+  .special {
+    font-family: 'clicker script','segoe script','Comic Sans MS';
+  }
+
+  @include media('<mini') {
+    width: 100%;
+  }
+}

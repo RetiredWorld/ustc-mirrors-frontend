@@ -1,0 +1,69 @@
+$mobile-color: #f5f5f5;
+
+.box {
+  position: relative;
+  width: 100%;
+  padding: 15px 20px;
+  border-radius: 8px;
+  margin: 6px 0;
+  transition: .3s;
+  cursor: pointer;
+
+  @include media("<=mini") {
+    margin: 4px 0 0;
+    padding: 15px 20px;
+  }
+}
+
+.grey {
+  background: #F0F0F0;
+  cursor: auto;
+
+  &:hover {
+    background: #f4f4f4;
+  }
+
+  @include media("<=mini") {
+    background: $mobile-color;
+
+    &:hover {
+      background: $mobile-color;
+    }
+  }
+}
+
+.orange {
+  background: #3a6ea3;
+
+  &:hover {
+    background: #4579af;
+  }
+}
+
+.blue {
+  background: #1fa2a9;
+
+  &:hover {
+    background: #3ca8ad;
+  }
+
+  @include media("<=mini") {
+    background: $mobile-color;
+
+    &:hover {
+      background: $mobile-color;
+    }
+  }
+}
+
+.green {
+  background: #4ba376;
+
+  &:hover {
+    background: #4dab7b;
+  }
+}
+
+.transparent {
+  background: transparent;
+}

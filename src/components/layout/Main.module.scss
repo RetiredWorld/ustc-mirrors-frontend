@@ -1,0 +1,23 @@
+.main {
+  position: relative;
+  padding: 20px 30px;
+  flex: 5;
+  min-height: 28vh;
+
+  @include media("<=mini") {
+    padding: 0 22px;
+  }
+
+  &Side {
+    position: relative;
+    right: 0;
+    width: 93%;
+    margin-left: auto;
+
+
+    @include media("<=mini") {
+      width: 100%;
+    }
+  }
+}
+

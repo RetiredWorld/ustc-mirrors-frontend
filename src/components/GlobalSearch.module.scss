@@ -1,0 +1,50 @@
+.icon {
+  line-height: 54px;
+  color: white;
+  font-size: 24px;
+  width: 54px;
+  text-align: center;
+}
+
+.container {
+  position: fixed;
+  display: flex;
+  flex-direction: row-reverse;
+  background-color: rgb(136 136 136 / 30%);
+  bottom: 10px;
+  right: 8%;
+  border-radius: 8px;
+  height: 54px;
+  min-width: 54px;
+  backdrop-filter: blur(30px);
+  box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 15%);
+  transition: .3s;
+
+  &Active {
+    width: 84%;
+  }
+
+  @include media('>=phone') {
+    display: none;
+  }
+}
+
+
+.input {
+  display: none;
+  flex-grow: 1;
+}
+
+.input input {
+  background-color: rgba(0, 0, 0, 0);
+  border: none;
+  display: block;
+  height: 100%;
+  width: 100%;
+  padding: 0 10px 0 20px;
+  outline: none;
+}
+
+.containerActive .input{
+  display: block;
+}

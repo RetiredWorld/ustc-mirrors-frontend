@@ -1,0 +1,28 @@
+.container {
+  margin: 0 auto;
+  //margin-top: $nav-height;
+  //margin-top: 10px;
+  width: 80%;
+  max-width: 1100px;
+  display: flex;
+  flex-direction: row-reverse;
+  margin-bottom: 80px;
+
+  @include media(">phone", "<=tablet") {
+    width: 90%;
+  }
+
+  @include media("<=mini") {
+    flex-direction: column;
+    width: 90%;
+  }
+
+  @include media('<phone') {
+    width: 100%;
+  }
+}
+
+.fixed {
+  overflow: hidden;
+  height: 100%;
+}
