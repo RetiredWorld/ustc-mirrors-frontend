@@ -8,38 +8,46 @@ import LogoBlack from '../../public/logo-black.svg';
 import s from './Header.module.scss';
 
 const HeaderIndex: FC = () => {
-  const { keyword, setKeyword } = useContext(SearchContext);
+  const { filter, setFilter } = useContext(SearchContext);
   function handleInput(e) {
-    if (setKeyword) {
+    if (setFilter) {
       if (e.target.value) {
-        setKeyword(e.target.value);
+        setFilter({
+          ...filter,
+          keyword: e.target.value,
+        });
       } else {
-        setKeyword(null);
+        setFilter({
+          ...filter,
+          keyword: ``,
+        });
       }
     }
   }
   return (
     <div className={s.indexContainer}>
-      <Link href="/" passHref>
-        <div className={s.index}>
-          <div className={s.indexIcon}>
-            <LogoBlack />
+      <div className={s.index}>
+        <Link href="/" passHref>
+          <div>
+            <div className={s.indexIcon}>
+              <LogoBlack />
+            </div>
+            <div className={s.indexInfo}>
+              <h2 className={s.indexTitle}>科大镜像</h2>
+              <h2 className={s.indexTitleMobile}>文件列表</h2>
+              <div className={s.indexDes}>mirrors.ustc.edu.cn</div>
+            </div>
           </div>
-          <div className={s.indexInfo}>
-            <h2 className={s.indexTitle}>科大镜像</h2>
-            <h2 className={s.indexTitleMobile}>文件列表</h2>
-            <div className={s.indexDes}>mirrors.ustc.edu.cn</div>
-          </div>
-          <div className={s.indexSearch}>
-            <input
-              id="idx-search"
-              onChange={handleInput}
-              value={keyword || ``}
-            />
-            <FontAwesomeIcon icon={faSearch} />
-          </div>
+        </Link>
+        <div className={s.indexSearch}>
+          <input
+            id="idx-search"
+            onChange={handleInput}
+            value={filter.keyword || ``}
+          />
+          <FontAwesomeIcon icon={faSearch} />
         </div>
-      </Link>
+      </div>
     </div>
   );
 };

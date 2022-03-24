@@ -1,15 +1,15 @@
 import { FC, useState } from 'react';
 import ISOContext, { IISOInfo, initISOContext } from '@/context/ISOContext';
 import SearchContext, {
+  Filter,
   initSearchContext,
-  Keyword,
 } from '@/context/SearchContext';
 import IndexListContext, { IItems, initListContext } from './IndexListContext';
 
 const ContextWrapper: FC = ({ children }) => {
   const [items, setItems] = useState<IItems>(initListContext);
   const [ISO, setISO] = useState<IISOInfo>(initISOContext);
-  const [keyword, setKeyword] = useState<Keyword>(initSearchContext.keyword);
+  const [filter, setFilter] = useState<Filter>(initSearchContext.filter);
 
   const setISOWithMask: typeof setISO = (iso) => {
     if (document) {
@@ -33,8 +33,8 @@ const ContextWrapper: FC = ({ children }) => {
         <SearchContext.Provider
           value={{
             type: `mirror`,
-            keyword,
-            setKeyword,
+            filter,
+            setFilter,
           }}
         >
           {children}

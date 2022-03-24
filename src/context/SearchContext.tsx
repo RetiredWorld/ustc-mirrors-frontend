@@ -1,16 +1,21 @@
 import { createContext, Dispatch, SetStateAction } from 'react';
 
-export type Keyword = string | null;
+export type Filter = {
+  keyword: string;
+  filter?: string;
+};
 
 export interface ISearchContext {
   type: 'mirror' | 'folder';
-  keyword: Keyword;
-  setKeyword?: Dispatch<SetStateAction<Keyword>>;
+  filter: Filter;
+  setFilter?: Dispatch<SetStateAction<Filter>>;
 }
 
 export const initSearchContext: ISearchContext = {
   type: `mirror`,
-  keyword: ``,
+  filter: {
+    keyword: ``,
+  },
 };
 
 const SearchContext = createContext<ISearchContext>(initSearchContext);

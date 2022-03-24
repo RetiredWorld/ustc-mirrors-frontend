@@ -9,6 +9,8 @@ import {
   faTimesCircle,
 } from '@fortawesome/free-solid-svg-icons';
 import { IFolderItem } from '@/types/folder';
+import { useRouter } from 'next/router';
+import path from 'path';
 import s from './ItemList.module.scss';
 
 const LoadingLayer: FC = () => (
@@ -147,7 +149,7 @@ const MirrorItem: FC<{ item: ISingleMirror; letter?: string }> = ({
   const ele = (
     <tr onClick={handleClick}>
       <td className={s.name}>
-        <Link href={`/files${item.url}`}>{item.cname}</Link>
+        <Link href={`/files${item.url}/`}>{item.cname}</Link>
       </td>
       <td>{timeAndStatus.startTime}</td>
       {statusEle}
@@ -180,9 +182,44 @@ const MirrorItem: FC<{ item: ISingleMirror; letter?: string }> = ({
 
 const FolderItem: FC<{ item: IFolderItem }> = ({ item }) => {
   const isDirectory = item.type === `directory`;
+  const router = useRouter();
+  const [folderPath, setFolderPath] = useState<string>(``);
+
+  useEffect(() => {
+    if (!router.isReady) return;
+
+    let folder: string | undefined = ``;
+    const pathArr: string[] = [...(router.query.path as string[])];
+
+    folder = pathArr.reduce((prev, curr) => `${prev}/${curr}`, ``);
+    setFolderPath(folder);
+  }, [router.isReady]);
+
+  function folderURLRewrite(name: string, isDir: boolean): string {
+    if (!isDir) {
+      return `${folderPath}/${item.name}`;
+    }
+
+    return name;
+  }
+  const url = folderURLRewrite(item.name, isDirectory);
+
   return (
     <tr>
-      <td>{isDirectory ? `${item.name}/` : item.name}</td>
+      <td className={s.name}>
+        <a
+          onClick={(e) => {
+            e.preventDefault();
+            router.push(
+              isDirectory ? path.join(window.location.pathname, url) : url,
+            );
+            // router.push(url);
+          }}
+          href={url}
+        >
+          {isDirectory ? `${item.name}/` : item.name}
+        </a>
+      </td>
       <td>{formatDate(item.mtime, false)}</td>
       <td>{isDirectory ? `-` : item.size}</td>
     </tr>

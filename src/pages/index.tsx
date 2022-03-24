@@ -1,25 +1,16 @@
 import HeaderIndex from '@/components/Header';
 import { MirrorItemTable } from '@/components/ItemList';
-import GlobalSearch from '@/components/GlobalSearch';
-import { mirrors } from '@/components/Mock';
+import GlobalSearch, { useFilterMirror } from '@/components/GlobalSearch';
 import SearchContext from '@/context/SearchContext';
-import { useContext, useEffect, useState } from 'react';
-import { ISingleMirror } from '@/types/mirror';
+import { useContext, useState } from 'react';
+import useSWR from 'swr';
+import { mirrorAPI } from '@/api';
 
 export default function Home() {
-  const { keyword } = useContext(SearchContext);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  let filteredMirrors: ISingleMirror[] = mirrors.mirrors;
-  if (keyword && keyword !== ``) {
-    filteredMirrors = mirrors.mirrors.filter((mirror) =>
-      mirror.cname.toLowerCase().includes(keyword),
-    );
-  }
-  useEffect(() => {
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 500);
-  }, []);
+  const { filter } = useContext(SearchContext);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const { data, error } = useSWR(`mirror/index`, mirrorAPI);
+  const filteredMirrors = useFilterMirror(data?.mirrors);
   return (
     <div>
       <HeaderIndex />

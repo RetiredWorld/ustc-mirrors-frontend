@@ -1,24 +1,33 @@
 import HeaderIndex from '@/components/Header';
 import { FolderItemTable } from '@/components/ItemList';
-import GlobalSearch from '@/components/GlobalSearch';
-import { folders } from '@/components/Mock';
-import { useContext, useEffect, useState } from 'react';
-import SearchContext from '@/context/SearchContext';
-import { IFolderItem } from '@/types/folder';
+import GlobalSearch, { useFilterFolder } from '@/components/GlobalSearch';
+import { useState } from 'react';
+import useSWR from 'swr';
+import { folderAPI } from '@/api';
+import { useRouter } from 'next/router';
 
 export default function Home() {
-  const { keyword } = useContext(SearchContext);
-  let filteredFolders: IFolderItem[] = folders;
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  if (keyword && keyword !== ``) {
-    filteredFolders = folders.filter((folder) => folder.name.includes(keyword));
+  const { query } = useRouter();
+
+  let folderPath: string | undefined = ``;
+
+  try {
+    folderPath = (query.path as string[]).reduce(
+      (prev, curr) => `${prev}/${curr}`,
+      ``,
+    );
+  } catch (e) {
+    folderPath = undefined;
   }
 
-  useEffect(() => {
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 500);
-  }, []);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  const { data, error } = useSWR(
+    folderPath ? `folder/${folderPath}` : null,
+    folderPath ? async () => folderAPI(folderPath as string) : null,
+  );
+  const filteredFolders = useFilterFolder(data);
+
   return (
     <div>
       <HeaderIndex />
