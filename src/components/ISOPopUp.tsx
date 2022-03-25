@@ -28,7 +28,7 @@ const ISOPopUp: FC = () => {
         }
       });
     }
-  }, [ISO.isPop]);
+  }, [ISO, setISO]);
 
   function handleClose() {
     const newISO = { ...ISO };

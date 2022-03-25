@@ -8,8 +8,8 @@ import ISOContext from '@/context/ISOContext';
 
 export default function Home() {
   const { ISO, setISO } = useContext(ISOContext);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const { data, error } = useSWR(mirrorAPIKey(), mirrorAPI);
+  const [isLoading] = useState<boolean>(false);
+  const { data } = useSWR(mirrorAPIKey(), mirrorAPI);
   const filteredMirrors = useFilterMirror(data?.mirrors);
   if (ISO.iso.length === 0) {
     if (data) {

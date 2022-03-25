@@ -199,7 +199,7 @@ const FolderItem: FC<{ item: IFolderItem }> = ({ item }) => {
 
     folder = pathArr.reduce((prev, curr) => `${prev}/${curr}`, ``);
     setFolderPath(folder);
-  }, [router.isReady]);
+  }, [router.isReady, router.query.path]);
 
   const url = folderURLRewrite(item.name, folderPath, isDirectory);
 

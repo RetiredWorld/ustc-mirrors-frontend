@@ -1,4 +1,8 @@
-// config sidebar
+// request api
+export const MIRROR_API_URL = `https://mirrors.ustc.edu.cn/static/json/mirrorz.json`;
+export const FOLDER_API_URL = `https://mirrors.ustc.edu.cn/api/files/`;
+
+// config metadata
 export const metaConfig: IMetaConfig = {
   siteName: `科大镜像`,
   domain: `mirrors.ustc.edu.cn`,
@@ -10,6 +14,7 @@ export const metaConfig: IMetaConfig = {
   },
 };
 
+// config sidebar
 export const sideConfig: ISideConfig = {
   mirrors: {
     enable: true, // enable mirror download page

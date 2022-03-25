@@ -1,5 +1,6 @@
 import { IMirror } from '@/types/mirror';
 import { IFolderItem } from '@/types/folder';
+import { FOLDER_API_URL, MIRROR_API_URL } from '@/config';
 
 interface IHeader {
   [key: string]: string;
@@ -14,9 +15,6 @@ interface IRequest {
 const BASE_HEADERS: IHeader = {
   'Content-Type': `application/json`,
 };
-
-export const MIRROR_API_URL = `http://localhost/static/json/mirrorz.json`;
-export const FOLDER_API_URL = `http://localhost/api/files/`;
 
 const baseFetch = async <T>(props: IRequest) => {
   const headers = { ...BASE_HEADERS, ...props.headers };

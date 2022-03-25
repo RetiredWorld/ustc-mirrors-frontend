@@ -1,4 +1,11 @@
-import { FC, useCallback, useContext, useEffect, useRef } from 'react';
+import {
+  ChangeEvent,
+  FC,
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+} from 'react';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
@@ -60,7 +67,7 @@ const GlobalSearch: FC = () => {
     const ele = containerEle.current;
     ele?.classList.remove(s.containerActive);
   }, []);
-  function handleInput(e) {
+  function handleInput(e: ChangeEvent<HTMLInputElement>) {
     if (setFilter) {
       if (e.target.value) {
         setFilter({
@@ -85,7 +92,7 @@ const GlobalSearch: FC = () => {
       ele?.removeEventListener(`click`, handleClick);
       input?.removeEventListener(`focusout`, handleUnFocus);
     };
-  }, []);
+  }, [handleUnFocus]);
 
   return (
     <div ref={containerEle} className={s.container}>

@@ -20,9 +20,9 @@ export default function Home() {
     folderPath = undefined;
   }
 
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoading] = useState<boolean>(false);
 
-  const { data, error } = useSWR(
+  const { data } = useSWR(
     folderPath ? folderAPIKey(folderPath) : null,
     folderPath ? async () => folderAPI(folderPath as string) : null,
   );
