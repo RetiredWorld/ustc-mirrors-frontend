@@ -1,5 +1,11 @@
 import { FC, useCallback, useEffect, useRef, useState } from 'react';
-import { formatDate, ISingleMirror, parseTimeAndStatus } from '@/types/mirror';
+import { ISingleMirror } from '@/types/mirror';
+import {
+  folderURLRewrite,
+  formatDate,
+  formatSize,
+  parseTimeAndStatus,
+} from '@/utils';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Link from 'next/link';
 import {
@@ -28,7 +34,7 @@ const FolderHeader: FC = () => (
     <tr>
       <th>文件夹名称</th>
       <th>最近更新日期</th>
-      <th>文件大小</th>
+      <th>大小</th>
     </tr>
   </thead>
 );
@@ -195,14 +201,7 @@ const FolderItem: FC<{ item: IFolderItem }> = ({ item }) => {
     setFolderPath(folder);
   }, [router.isReady]);
 
-  function folderURLRewrite(name: string, isDir: boolean): string {
-    if (!isDir) {
-      return `${folderPath}/${item.name}`;
-    }
-
-    return name;
-  }
-  const url = folderURLRewrite(item.name, isDirectory);
+  const url = folderURLRewrite(item.name, folderPath, isDirectory);
 
   return (
     <tr>
@@ -221,7 +220,7 @@ const FolderItem: FC<{ item: IFolderItem }> = ({ item }) => {
         </a>
       </td>
       <td>{formatDate(item.mtime, false)}</td>
-      <td>{isDirectory ? `-` : item.size}</td>
+      <td>{formatSize(item.size)}</td>
     </tr>
   );
 };
@@ -267,7 +266,7 @@ export const MirrorItemTable: FC<{
   items: ISingleMirror[];
   isLoading: boolean;
 }> = ({ items, isLoading }) => (
-  <table className={s.table}>
+  <table className={`${s.table} ${s.folder}`}>
     <MirrorHeader />
     {isLoading ? <LoadingLayer /> : <MirrorItemList items={items} />}
   </table>
@@ -275,7 +274,7 @@ export const MirrorItemTable: FC<{
 
 export const FolderItemTable: FC<{ items: IFolderItem[]; isLoading: boolean }> =
   ({ items, isLoading }) => (
-    <table className={s.table}>
+    <table className={`${s.table} ${s.folder}`}>
       <FolderHeader />
       {isLoading ? <LoadingLayer /> : <FolderItemList items={items} />}
     </table>

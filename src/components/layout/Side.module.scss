@@ -110,7 +110,7 @@
 
     margin-top: 10px;
     opacity: 1;
-    max-height: 200px;
+    max-height: 230px;
 
     &.close {
       margin-top: 0;
@@ -370,4 +370,8 @@
     display: none;
   }
 
+}
+
+.homepageLink {
+  text-decoration: none;
 }

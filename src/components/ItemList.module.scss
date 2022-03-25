@@ -346,3 +346,15 @@ $drop-height: 38px;
 
   }
 }
+
+.folder {
+  th:last-child {
+    @include media('<mini') {
+      width: 40%;
+    }
+  }
+}
+
+.mirror {
+
+}

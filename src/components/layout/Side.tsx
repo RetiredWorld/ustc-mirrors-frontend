@@ -14,6 +14,7 @@ import {
   faTools,
 } from '@fortawesome/free-solid-svg-icons';
 import ISOContext from '@/context/ISOContext';
+import { ILink, metaConfig, sideConfig } from '@/config';
 import s from './Side.module.scss';
 import Logo from '../../../public/logo.svg';
 
@@ -30,8 +31,8 @@ const About: FC<IAbout> = ({ mobileExpand, setMobileExpand }) => (
           <Logo />
         </div>
         <div className={s.aboutInfo}>
-          <div className={s.aboutTitle}>科大镜像</div>
-          <div className={s.aboutText}>mirrors.ustc.edu.cn</div>
+          <div className={s.aboutTitle}>{metaConfig.siteName}</div>
+          <div className={s.aboutText}>{metaConfig.domain}</div>
         </div>
         <div
           className={s.mobileAddon}
@@ -43,25 +44,26 @@ const About: FC<IAbout> = ({ mobileExpand, setMobileExpand }) => (
         </div>
       </div>
     </Link>
-    <div className={s.aboutUs}>
-      <p className={s.name}>
-        <span className={s.lug}>LUG</span>
-        <span className={s.ustc}>{`  `}@USTC</span>
-      </p>
-      <p className={s.special}>life love linux</p>
-    </div>
+    <a className={s.homepageLink} href={metaConfig.homepage}>
+      <div className={s.aboutUs}>
+        <p className={s.name}>
+          <span className={s.lug}>{metaConfig.logo.large}</span>
+          <span className={s.ustc}>
+            {`  `}@{metaConfig.logo.small}
+          </span>
+        </p>
+        {metaConfig.logo.special ? (
+          <p className={s.special}>{metaConfig.logo.special}</p>
+        ) : null}
+      </div>
+    </a>
   </Box>
 );
-
-interface IListItem {
-  name: string;
-  link: string;
-}
 
 interface IListSide {
   title: string;
   icon?: IconProp;
-  items: IListItem[];
+  items: ILink[];
   initClose?: boolean;
 }
 
@@ -109,11 +111,20 @@ interface IIconSide {
   icon: IconProp;
   des?: string;
   cls?: string;
+  link?: string;
   onClick?: (...args: any[]) => void;
 }
 
-const IconSide: FC<IIconSide> = ({ title, bg, icon, des, cls, onClick }) => (
-  <Box BgClass={bg} cls={cls} onClick={onClick}>
+const IconSide: FC<IIconSide> = ({
+  title,
+  bg,
+  icon,
+  des,
+  cls,
+  onClick,
+  link,
+}) => (
+  <Box BgClass={bg} cls={cls} onClick={onClick} link={link}>
     <div className={s.icon}>
       <div className={s.iconLarge}>
         <FontAwesomeIcon icon={icon} />
@@ -126,7 +137,7 @@ const IconSide: FC<IIconSide> = ({ title, bg, icon, des, cls, onClick }) => (
   </Box>
 );
 
-const MOCKNEWS: IListItem[] = [
+const MOCKNEWS: ILink[] = [
   {
     name: `关于移除 nodesource 镜像的通知`,
     link: `aaa`,
@@ -145,26 +156,17 @@ const MOCKNEWS: IListItem[] = [
   },
 ];
 
-const MOCKDOMAINS: IListItem[] = [
-  {
-    name: `mirrors.ustc.edu.cn 自动解析`,
-    link: `www`,
-  },
-  {
-    name: `mirrors.ustc.edu.cn 自动解析`,
-    link: `www`,
-  },
-];
-
 const News: FC = () => <ListSide title="新闻通知" items={MOCKNEWS} />;
-const Domains: FC = () => (
-  <ListSide
-    initClose
-    title="域名选择"
-    icon={faCodeBranch}
-    items={MOCKDOMAINS}
-  />
-);
+const Domains: FC = () =>
+  sideConfig.domains.enable ? (
+    <ListSide
+      initClose={sideConfig.domains.initClose}
+      title="域名选择"
+      icon={faCodeBranch}
+      items={sideConfig.domains.links}
+    />
+  ) : null;
+
 const Mirrors: FC = () => {
   const { ISO, setISO } = useContext(ISOContext);
   function handleClick() {
@@ -185,12 +187,26 @@ const Mirrors: FC = () => {
     />
   );
 };
-const Helps: FC = () => (
-  <IconSide title="镜像帮助" icon={faTools} bg="green" des="查看镜像使用说明" />
-);
-const Links: FC = () => (
-  <ListSide initClose title="常用链接" icon={faLink} items={MOCKNEWS} />
-);
+const Helps: FC = () =>
+  sideConfig.helps.enable ? (
+    <IconSide
+      title="镜像帮助"
+      icon={faTools}
+      link={sideConfig.helps.helpLink}
+      bg="green"
+      des="查看镜像使用说明"
+    />
+  ) : null;
+
+const Links: FC = () =>
+  sideConfig.links.enable ? (
+    <ListSide
+      initClose={sideConfig.links.initClose}
+      title="常用链接"
+      icon={faLink}
+      items={sideConfig.links.links}
+    />
+  ) : null;
 
 const Side: FC = () => {
   const [mobileExpand, setMobileExpand] = useState<boolean>(false);

@@ -41,11 +41,13 @@ const baseFetch = async <T>(props: IRequest) => {
   return (await rsp.json()) as T;
 };
 
+export const mirrorAPIKey = () => `mirror/index`;
 export const mirrorAPI = async () =>
   baseFetch<IMirror>({
     url: `${MIRROR_API_URL}`,
   });
 
+export const folderAPIKey = (folderName: string) => `folder/${folderName}`;
 export const folderAPI = async (folderName: string) =>
   baseFetch<IFolderItem[]>({
     url: `${FOLDER_API_URL}${folderName}/`,

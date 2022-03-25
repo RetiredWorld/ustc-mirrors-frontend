@@ -1,4 +1,5 @@
 import { FC } from 'react';
+import Link from 'next/link';
 import s from './Container.module.scss';
 
 export type IBoxColor = 'orange' | 'blue' | 'green' | 'transparent';
@@ -6,10 +7,11 @@ export type IBoxColor = 'orange' | 'blue' | 'green' | 'transparent';
 export interface IBox {
   BgClass?: IBoxColor;
   cls?: string;
+  link?: string;
   onClick?: (...args: any[]) => void;
 }
 
-const Box: FC<IBox> = ({ children, BgClass, cls, onClick }) => {
+const Box: FC<IBox> = ({ children, BgClass, cls, onClick, link }) => {
   let backgroundClass = ``;
   switch (BgClass) {
     case `blue`: {
@@ -32,7 +34,7 @@ const Box: FC<IBox> = ({ children, BgClass, cls, onClick }) => {
       backgroundClass = s.grey;
     }
   }
-  return (
+  const containerEle = (
     <div
       onClick={() => {
         if (onClick) {
@@ -43,6 +45,13 @@ const Box: FC<IBox> = ({ children, BgClass, cls, onClick }) => {
     >
       {children}
     </div>
+  );
+  return link ? (
+    <Link href={link} passHref>
+      {containerEle}
+    </Link>
+  ) : (
+    containerEle
   );
 };
 

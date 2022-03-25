@@ -3,7 +3,7 @@ import { FolderItemTable } from '@/components/ItemList';
 import GlobalSearch, { useFilterFolder } from '@/components/GlobalSearch';
 import { useState } from 'react';
 import useSWR from 'swr';
-import { folderAPI } from '@/api';
+import { folderAPI, folderAPIKey } from '@/api';
 import { useRouter } from 'next/router';
 
 export default function Home() {
@@ -23,7 +23,7 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const { data, error } = useSWR(
-    folderPath ? `folder/${folderPath}` : null,
+    folderPath ? folderAPIKey(folderPath) : null,
     folderPath ? async () => folderAPI(folderPath as string) : null,
   );
   const filteredFolders = useFilterFolder(data);
