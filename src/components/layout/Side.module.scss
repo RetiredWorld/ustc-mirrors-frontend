@@ -143,6 +143,7 @@
   flex-direction: row;
   align-items: flex-start;
   color: $side-icon;
+  cursor: pointer;
 
   @include media("<=mini") {
     align-items: center;

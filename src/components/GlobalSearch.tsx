@@ -1,57 +1,16 @@
-import {
-  ChangeEvent,
-  FC,
-  useCallback,
-  useContext,
-  useEffect,
-  useRef,
-} from 'react';
+import { ChangeEvent, FC, useCallback, useEffect, useRef } from 'react';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
-import SearchContext from '@/context/SearchContext';
-import { ISingleMirror } from '@/types/mirror';
-import { IFolderItem } from '@/types/folder';
+import { setKeyword } from '@/context/search';
+import { useAppDispatch, useAppSelector } from '@/utils/hooks';
 import s from './GlobalSearch.module.scss';
-
-export function useFilterMirror(
-  mirrorList: ISingleMirror[] | undefined,
-): ISingleMirror[] {
-  const { filter } = useContext(SearchContext);
-  let filteredMirrorList: ISingleMirror[] = [];
-  if (mirrorList) {
-    if (filter.keyword !== ``) {
-      filteredMirrorList = mirrorList.filter((mirror) =>
-        mirror.cname.toLowerCase().includes(filter.keyword),
-      );
-    } else {
-      filteredMirrorList = mirrorList;
-    }
-  }
-  return filteredMirrorList;
-}
-
-export function useFilterFolder(
-  folderList: IFolderItem[] | undefined,
-): IFolderItem[] {
-  const { filter } = useContext(SearchContext);
-  let filteredFolderList: IFolderItem[] = [];
-  if (folderList) {
-    if (filter.keyword !== ``) {
-      filteredFolderList = folderList.filter((folder) =>
-        folder.name.toLowerCase().includes(filter.keyword),
-      );
-    } else {
-      filteredFolderList = folderList;
-    }
-  }
-  return filteredFolderList;
-}
 
 const GlobalSearch: FC = () => {
   const containerEle = useRef<HTMLDivElement>(null);
   const inputEle = useRef<HTMLInputElement>(null);
-  const { filter, setFilter } = useContext(SearchContext);
+  const keyword = useAppSelector((state) => state.search.keyword);
+  const dispatch = useAppDispatch();
 
   const handleClick = () => {
     const ele = containerEle.current;
@@ -68,18 +27,10 @@ const GlobalSearch: FC = () => {
     ele?.classList.remove(s.containerActive);
   }, []);
   function handleInput(e: ChangeEvent<HTMLInputElement>) {
-    if (setFilter) {
-      if (e.target.value) {
-        setFilter({
-          ...filter,
-          keyword: e.target.value,
-        });
-      } else {
-        setFilter({
-          ...filter,
-          keyword: ``,
-        });
-      }
+    if (e.target.value) {
+      dispatch(setKeyword(e.target.value));
+    } else {
+      dispatch(setKeyword(``));
     }
   }
 
@@ -104,7 +55,7 @@ const GlobalSearch: FC = () => {
           ref={inputEle}
           type="text"
           onChange={handleInput}
-          value={filter.keyword || ``}
+          value={keyword || ``}
         />
       </div>
     </div>

@@ -1,10 +1,11 @@
 import HeaderIndex from '@/components/Header';
 import { FolderItemTable } from '@/components/ItemList';
-import GlobalSearch, { useFilterFolder } from '@/components/GlobalSearch';
+import GlobalSearch from '@/components/GlobalSearch';
 import { useState } from 'react';
 import useSWR from 'swr';
 import { folderAPI, folderAPIKey } from '@/api';
 import { useRouter } from 'next/router';
+import { useFilterFolder } from '@/utils/hooks';
 
 export default function Home() {
   const { query } = useRouter();

@@ -1,13 +1,15 @@
-import { FC, useContext, useEffect, useState } from 'react';
-import ISOContext from '@/context/ISOContext';
+import {FC, useEffect, useState} from 'react';
 import Box from '@/components/Container';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTimes } from '@fortawesome/free-solid-svg-icons';
-import { mirrorAPI } from '@/api';
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+import {faTimes} from '@fortawesome/free-solid-svg-icons';
+import {mirrorAPI} from '@/api';
 import s from './ISOPopUp.module.scss';
+import {useAppDispatch, useAppSelector} from '@/utils/hooks';
+import {changeISODisplay, updateISOList} from '@/context/iso';
 
 const ISOPopUp: FC = () => {
-  const { ISO, setISO } = useContext(ISOContext);
+  const ISO = useAppSelector(state => state.iso);
+  const dispatch = useAppDispatch();
   const [selectedISO, setSelectedISO] = useState<number>(0);
   const selected =
     ISO.iso.length === 0
@@ -20,22 +22,13 @@ const ISOPopUp: FC = () => {
   useEffect(() => {
     if (ISO.isPop && ISO.iso.length === 0) {
       mirrorAPI().then((data) => {
-        if (setISO) {
-          setISO({
-            ...ISO,
-            iso: data.info,
-          });
-        }
+        dispatch(updateISOList(data.info));
       });
     }
-  }, [ISO, setISO]);
+  }, [ISO]);
 
   function handleClose() {
-    const newISO = { ...ISO };
-    newISO.isPop = false;
-    if (setISO) {
-      setISO(newISO);
-    }
+    dispatch(changeISODisplay(false));
   }
 
   function handleSelectISO(selectedIndex: number) {

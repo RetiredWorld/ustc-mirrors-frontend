@@ -1,24 +1,21 @@
 import HeaderIndex from '@/components/Header';
-import { MirrorItemTable } from '@/components/ItemList';
-import GlobalSearch, { useFilterMirror } from '@/components/GlobalSearch';
-import { useContext, useState } from 'react';
+import {MirrorItemTable} from '@/components/ItemList';
+import GlobalSearch from '@/components/GlobalSearch';
+import {useState} from 'react';
 import useSWR from 'swr';
-import { mirrorAPI, mirrorAPIKey } from '@/api';
-import ISOContext from '@/context/ISOContext';
+import {mirrorAPI, mirrorAPIKey} from '@/api';
+import {useAppDispatch, useAppSelector, useFilterMirror} from '@/utils/hooks';
+import {updateISOList} from '@/context/iso';
 
 export default function Home() {
-  const { ISO, setISO } = useContext(ISOContext);
+  const ISO = useAppSelector(state => state.iso);
+  const dispatch = useAppDispatch();
   const [isLoading] = useState<boolean>(false);
   const { data } = useSWR(mirrorAPIKey(), mirrorAPI);
   const filteredMirrors = useFilterMirror(data?.mirrors);
   if (ISO.iso.length === 0) {
     if (data) {
-      if (setISO) {
-        setISO({
-          ...ISO,
-          iso: data.info,
-        });
-      }
+      dispatch(updateISOList(data.info));
     }
   }
 
