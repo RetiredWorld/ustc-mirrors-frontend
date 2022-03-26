@@ -11,12 +11,14 @@ import Link from 'next/link';
 import {
   faCheckCircle,
   faCircleNotch,
+  faSort,
   faSync,
   faTimesCircle,
 } from '@fortawesome/free-solid-svg-icons';
 import { IFolderItem } from '@/types/folder';
 import { useRouter } from 'next/router';
 import path from 'path';
+import { useRouterPath } from '@/utils/hooks';
 import s from './ItemList.module.scss';
 
 const LoadingLayer: FC = () => (
@@ -32,9 +34,18 @@ const LoadingLayer: FC = () => (
 const FolderHeader: FC = () => (
   <thead className={s.header}>
     <tr>
-      <th className={s.name}>文件夹名称</th>
-      <th className={s.date}>最近更新日期</th>
-      <th className={s.size}>大小</th>
+      <th className={s.name}>
+        文件名称
+        <FontAwesomeIcon icon={faSort} />
+      </th>
+      <th className={s.date}>
+        最近更新日期
+        <FontAwesomeIcon icon={faSort} />
+      </th>
+      <th className={s.size}>
+        大小
+        <FontAwesomeIcon icon={faSort} />
+      </th>
     </tr>
   </thead>
 );
@@ -42,9 +53,18 @@ const FolderHeader: FC = () => (
 const MirrorHeader: FC = () => (
   <thead className={s.header}>
     <tr>
-      <th className={s.name}>镜像名称</th>
-      <th className={s.date}>最近更新日期</th>
-      <th className={s.status}>状态</th>
+      <th className={s.name}>
+        镜像名称
+        <FontAwesomeIcon icon={faSort} />
+      </th>
+      <th className={s.date}>
+        最近更新日期
+        <FontAwesomeIcon icon={faSort} />
+      </th>
+      <th className={s.status}>
+        状态
+        <FontAwesomeIcon icon={faSort} />
+      </th>
       <th>详情</th>
       <th>帮助</th>
     </tr>
@@ -186,19 +206,9 @@ const MirrorItem: FC<{ item: ISingleMirror; letter?: string }> = ({
 const FolderItem: FC<{ item: IFolderItem }> = ({ item }) => {
   const isDirectory = item.type === `directory`;
   const router = useRouter();
-  const [folderPath, setFolderPath] = useState<string>(``);
+  const folderPath = useRouterPath(false);
 
-  useEffect(() => {
-    if (!router.isReady) return;
-
-    let folder: string | undefined = ``;
-    const pathArr: string[] = [...(router.query.path as string[])];
-
-    folder = pathArr.reduce((prev, curr) => `${prev}/${curr}`, ``);
-    setFolderPath(folder);
-  }, [router.isReady, router.query.path]);
-
-  const url = folderURLRewrite(item.name, folderPath, isDirectory);
+  const url = folderURLRewrite(item.name, isDirectory, folderPath);
 
   return (
     <tr>
@@ -209,7 +219,6 @@ const FolderItem: FC<{ item: IFolderItem }> = ({ item }) => {
             router.push(
               isDirectory ? path.join(window.location.pathname, url) : url,
             );
-            // router.push(url);
           }}
           href={url}
         >

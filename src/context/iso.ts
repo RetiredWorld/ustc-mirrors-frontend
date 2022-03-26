@@ -26,7 +26,7 @@ export const isoSlice = createSlice({
   reducers: {
     changeISODisplay(state, action: PayloadAction<boolean>) {
       if (document) {
-        if (state.isPop) {
+        if (!state.isPop) {
           document.getElementsByTagName(`html`)[0].style.overflowY = `hidden`;
         } else {
           document.getElementsByTagName(`html`)[0].style.overflowY = `auto`;

@@ -55,6 +55,10 @@ $drop-height: 38px;
     margin: 5px;
     color: $list-th;
     background: $list-th-bg;
+
+    >svg {
+      margin-left: 3px;
+    }
   }
 
   td {
@@ -150,6 +154,10 @@ $drop-height: 38px;
 
 .header {
   position: relative;
+
+  .name, .date, .size, .status {
+    cursor: pointer;
+  }
 }
 
 .body {
@@ -344,3 +352,4 @@ $drop-height: 38px;
 .loading {
   color: red;
 }
+

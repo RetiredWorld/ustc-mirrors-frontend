@@ -1,13 +1,14 @@
 import { IMirrorStatus, ISingleMirror } from '@/types/mirror';
+import path from 'path';
 
 // rewrite folder url to match exact location of file and folder
 export function folderURLRewrite(
   name: string,
-  folderPath: string,
   isDir: boolean,
+  folderPath?: string,
 ): string {
   if (!isDir) {
-    return `${folderPath}/${name}`;
+    return path.join(folderPath || ``, name);
   }
 
   return name;

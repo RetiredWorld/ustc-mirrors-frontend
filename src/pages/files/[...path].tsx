@@ -4,22 +4,11 @@ import GlobalSearch from '@/components/GlobalSearch';
 import { useState } from 'react';
 import useSWR from 'swr';
 import { folderAPI, folderAPIKey } from '@/api';
-import { useRouter } from 'next/router';
-import { useFilterFolder } from '@/utils/hooks';
+import { useFilterFolder, useRouterPath } from '@/utils/hooks';
+import MetaHead from '@/components/layout/MetaHead';
 
-export default function Home() {
-  const { query } = useRouter();
-
-  let folderPath: string | undefined = ``;
-
-  try {
-    folderPath = (query.path as string[]).reduce(
-      (prev, curr) => `${prev}/${curr}`,
-      ``,
-    );
-  } catch (e) {
-    folderPath = undefined;
-  }
+export default function Folder() {
+  const folderPath = useRouterPath(false);
 
   const [isLoading] = useState<boolean>(false);
 
@@ -31,6 +20,7 @@ export default function Home() {
 
   return (
     <div>
+      <MetaHead title={folderPath ? `Index of /${folderPath}/` : undefined} />
       <HeaderIndex />
       <FolderItemTable items={filteredFolders} isLoading={isLoading} />
       <GlobalSearch />

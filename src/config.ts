@@ -6,11 +6,15 @@ export const FOLDER_API_URL = `https://mirrors.ustc.edu.cn/api/files/`;
 export const metaConfig: IMetaConfig = {
   siteName: `科大镜像`,
   domain: `mirrors.ustc.edu.cn`,
+  domainLink: `https://mirrors.ustc.edu.cn`,
   homepage: `https://lug.ustc.edu.cn`,
   logo: {
     large: `LUG`,
     small: `USTC`,
     special: `life love linux`,
+  },
+  meta: {
+    defaultTitle: `USTC Open Source Software Mirror | 中国科学技术大学开源软件镜像站`,
   },
 };
 
@@ -106,7 +110,11 @@ export interface ILink {
 interface IMetaConfig {
   siteName: string;
   domain: string;
+  domainLink: string;
   homepage: string;
+  meta: {
+    defaultTitle: string;
+  };
   logo: {
     large: string;
     small: string;

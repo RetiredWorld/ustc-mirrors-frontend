@@ -6,6 +6,7 @@ import useSWR from 'swr';
 import { mirrorAPI, mirrorAPIKey } from '@/api';
 import { useAppDispatch, useAppSelector, useFilterMirror } from '@/utils/hooks';
 import { updateISOList } from '@/context/iso';
+import MetaHead from '@/components/layout/MetaHead';
 
 export default function Home() {
   const ISO = useAppSelector((state) => state.iso);
@@ -24,6 +25,7 @@ export default function Home() {
 
   return (
     <div>
+      <MetaHead />
       <HeaderIndex />
       <MirrorItemTable items={filteredMirrors} isLoading={isLoading} />
       <GlobalSearch />

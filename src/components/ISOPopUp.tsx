@@ -1,14 +1,14 @@
-import {FC, useEffect, useState} from 'react';
+import { FC, useEffect, useState } from 'react';
 import Box from '@/components/Container';
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-import {faTimes} from '@fortawesome/free-solid-svg-icons';
-import {mirrorAPI} from '@/api';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTimes } from '@fortawesome/free-solid-svg-icons';
+import { mirrorAPI } from '@/api';
+import { useAppDispatch, useAppSelector } from '@/utils/hooks';
+import { changeISODisplay, updateISOList } from '@/context/iso';
 import s from './ISOPopUp.module.scss';
-import {useAppDispatch, useAppSelector} from '@/utils/hooks';
-import {changeISODisplay, updateISOList} from '@/context/iso';
 
 const ISOPopUp: FC = () => {
-  const ISO = useAppSelector(state => state.iso);
+  const ISO = useAppSelector((state) => state.iso);
   const dispatch = useAppDispatch();
   const [selectedISO, setSelectedISO] = useState<number>(0);
   const selected =
@@ -25,7 +25,7 @@ const ISOPopUp: FC = () => {
         dispatch(updateISOList(data.info));
       });
     }
-  }, [ISO]);
+  }, [ISO, dispatch]);
 
   function handleClose() {
     dispatch(changeISODisplay(false));

@@ -1,8 +1,7 @@
 .index {
   position: relative;
-  display: flex;
-  flex-direction: row;
   align-items:center;
+  width: 100%;
 
   &Container {
     z-index: 1;
@@ -17,6 +16,7 @@
   }
 
   &Icon {
+    cursor: pointer;
     position: absolute;
     font-size: 36px;
     margin-right: 15px;
@@ -36,8 +36,6 @@
   }
 
   &Info {
-    cursor: pointer;
-
     @include media("<=phone") {
       flex-direction: row;
       justify-content: space-between;
@@ -72,6 +70,8 @@
   }
 
   &Title {
+    display: inline;
+    cursor: pointer;
     font-weight: bold;
     font-size: 2rem;
 
@@ -91,8 +91,20 @@
   &Des {
     position: relative;
     top: -5px;
+    max-width: 70%;
 
     @extend %hide-phone;
   }
+}
 
+.bread {
+
+  a {
+    text-decoration: none;
+    color: inherit;
+
+    &:last-child {
+      font-weight: bold;
+    }
+  }
 }
