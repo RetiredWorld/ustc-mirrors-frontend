@@ -2,7 +2,7 @@ import { FC } from 'react';
 import Link from 'next/link';
 import s from './Container.module.scss';
 
-export type IBoxColor = 'orange' | 'blue' | 'green' | 'transparent';
+export type IBoxColor = 'orange' | 'blue' | 'green' | 'pure';
 
 export interface IBox {
   BgClass?: IBoxColor;
@@ -15,23 +15,23 @@ const Box: FC<IBox> = ({ children, BgClass, cls, onClick, link }) => {
   let backgroundClass = ``;
   switch (BgClass) {
     case `blue`: {
-      backgroundClass = s.blue;
+      backgroundClass = s.ctBlue;
       break;
     }
     case `green`: {
-      backgroundClass = s.green;
+      backgroundClass = s.ctGreen;
       break;
     }
     case `orange`: {
-      backgroundClass = s.orange;
+      backgroundClass = s.ctOrange;
       break;
     }
-    case `transparent`: {
-      backgroundClass = s.transparent;
+    case `pure`: {
+      backgroundClass = s.ctPure;
       break;
     }
     default: {
-      backgroundClass = s.grey;
+      backgroundClass = s.ctGrey;
     }
   }
   const containerEle = (

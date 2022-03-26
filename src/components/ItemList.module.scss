@@ -1,23 +1,10 @@
-.table {
-  width: 100%;
-  text-align: left;
-  border-collapse: separate;
-
-  table-layout: fixed;
-}
-
-%hide-sec{
-  &:nth-child(2) {
-    @include media("<=phone") {
-      display: none;
-    }
-  }
-
-  &:last-child {
-    text-align: center;
-  }
-
-}
+$drop-bg-transition: .2s;
+$drop-bg-delay: .05s;
+$drop-text-delay: .15s;
+$drop-text-transition: .2s;
+$drop-height-transition: .4s;
+$drop-bg-height: 70px;
+$drop-height: 38px;
 
 %cell {
   padding: 5px 10px;
@@ -27,58 +14,100 @@
   }
 }
 
-.header {
-  position: relative;
+%right-br {
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 8px;
+}
+
+%left-br {
+  border-top-left-radius: 8px;
+  border-bottom-left-radius: 8px;
+}
+
+%tb-name {
+  @include media('>mini') {
+    width: 40%;
+  }
+}
+
+%tb-date {
+  @extend %hide-phone;
+
+  @include media('>mini') {
+    width: 32%;
+  }
+
+}
+
+.table {
+  th, td {
+    @extend %cell;
+  }
 
   th {
-    @extend %hide-sec;
-    @extend %cell;
-
     font-weight: bold;
     margin: 5px;
-    color: #555;
-    background: #eeeeee;
+    color: $list-th;
+    background: $list-th-bg;
+  }
 
+  td {
+    transition: .3s;
+    color: $list-td;
+  }
+}
+
+.table {
+  width: 100%;
+  text-align: left;
+  border-collapse: separate;
+  table-layout: fixed;
+}
+
+.name {
+  @extend %left-br;
+}
+
+.mirror {
+  th, td {
+    // mirror name
     &:first-child {
-      border-top-left-radius: 8px;
-      border-bottom-left-radius: 8px;
-
-      @include media('>mini') {
-        width: 38%;
-      }
-
-      @include media('<phone') {
-        width: 80%;
-      }
+      @extend %tb-name;
     }
 
+    // mirror date
     &:nth-child(2) {
-      @include media('>mini') {
-        width: 32%;
-      }
-
+      @extend %tb-date;
     }
 
-
+    // mirror status
     &:nth-child(3) {
+      @extend %hide-mini;
+
       @include media('>mini') {
         width: 15%;
       }
     }
 
+    // mirror detail
     &:nth-child(4) {
-      @include media('>mini') {
-        width: 15%;
-      }
-    }
+      @extend %right-br;
 
-    &:last-child {
-      border-top-right-radius: 8px;
-      border-bottom-right-radius: 8px;
+      text-align: center;
 
       @include media('<mini') {
-        width: 25%;
+        width: 23%;
       }
+
+      @include media('>=phone') {
+        display: none;
+      }
+    }
+
+    // mirror help
+    &:last-child {
+      @extend %right-br;
+      @extend %hide-phone;
 
       @include media('<mini') {
         width: 20%;
@@ -87,22 +116,44 @@
   }
 }
 
-.body {
+.folder {
+  th, td {
+    // folder name
+    &:first-child {
+      @extend %tb-name;
+    }
 
+    // folder date
+    &:nth-child(2) {
+      @extend %tb-date;
+    }
+
+    // folder size
+    &:last-child {
+      @extend %right-br;
+      text-align: center;
+    }
+  }
+}
+
+
+.header {
+  position: relative;
+}
+
+.body {
   tr {
     transition: .15s;
 
     .help {
       transition: .2s;
-      color: #959595;
+      color: $list-help;
     }
   }
 
   td {
-    @extend %hide-sec;
-    @extend %cell;
     transition: .3s;
-    color: #454545;
+    color: $list-td;
 
     &:first-child {
       font-weight: 700;
@@ -126,14 +177,7 @@
 
   tr {
     &:hover {
-      background: #f7f7f7;
-      td:first-child {
-        color: black;
-      }
-
-      a {
-        color: #383838;
-      }
+      background: $list-tr-hover;
     }
 
     @include media('<phone') {
@@ -143,33 +187,14 @@
     }
   }
 
-  .syncing {
-    text-align: center;
-    color: #ffe100;
-  }
-
-  .success {
-    text-align: center;
-    color: #2fb42f;
-  }
-
-  .fail {
-    text-align: center;
-    color: red;
-  }
-
-  .syncing, .success, .fail {
-    zoom: 0.8;
+  @each $name, $opts in $mirror-status-schema {
+    .#{$name} {
+      text-align: center;
+      zoom: 0.8;
+      color: map-get($opts, "color");
+    }
   }
 }
-
-$drop-bg-transition: .2s;
-$drop-bg-delay: .05s;
-$drop-text-delay: .15s;
-$drop-text-transition: .2s;
-$drop-height-transition: .4s;
-$drop-bg-height: 70px;
-$drop-height: 38px;
 
 .drop {
   display: none;
@@ -211,7 +236,7 @@ $drop-height: 38px;
 
     p {
       font-size: 12px;
-      color: #8D8D8D;
+      color: $list-drop-p;
     }
   }
 }
@@ -222,7 +247,7 @@ $drop-height: 38px;
   opacity: 1;
 
   &:before {
-    background: #EFEFEF;
+    background: $list-trans;
     height: $drop-bg-height;
   }
 
@@ -232,7 +257,7 @@ $drop-height: 38px;
 
     .help {
       transition: .2s;
-      color: #959595;
+      color: $list-help;
       font-size: 12px;
       //text-decoration: none;
     }
@@ -251,10 +276,12 @@ $drop-height: 38px;
   font-size: 1.6rem;
   top: 20px;
   width: 24px;
-  color: #ccc;
+  color: $list-letter;
   text-align: right;
   position: sticky;
   transform: translateX(-75px);
+
+  @extend %hide-mini;
 
   &:before {
     position: absolute;
@@ -264,7 +291,7 @@ $drop-height: 38px;
     height: 30px;
     top: 6px;
     width: 24px;
-    background: white;
+    background: $list-letter-bf;
   }
 
   &:after {
@@ -275,27 +302,19 @@ $drop-height: 38px;
     top: 16px;
     right: -49px;
     width: 35px;
-    border-bottom: 2.5px dotted #ccc;
+    border-bottom: $list-letter-line;
   }
-
-  @include media('<=mini') {
-    display: none;
-  }
-
 }
 
 .status {
   text-align: center;
 
-  @include media('<tablet') {
-    display: none;
-  }
+  @extend %hide-tablet;
 }
 
 .detail {
-  border-top-right-radius: 8px;
-  border-bottom-right-radius: 8px;
-  text-align: center;
+  color: $list-detail;
+  zoom: .8;
 
   .title {
     margin-right: 6px;
@@ -306,55 +325,15 @@ $drop-height: 38px;
     margin-right: 4px;
   }
 
-  &.icon {
-    color: grey;
-    zoom: .8;
-
-  }
-
-  &.fail {
-      color: red;
-  }
-
-  &.syncing {
-    span {
-      color: orange;
+  @each $name, $opts in $mirror-status-schema {
+    &.#{$name} {
+      span {
+        color: map-get($opts, "color");
+      }
     }
-  }
-
-  &.success {
-    span {
-      color: #2fb42f;
-    }
-  }
-
-
-  @include media('>phone') {
-    display: none;
   }
 }
 
 .loading {
   color: red;
-}
-
-.table {
-  .help {
-    @include media('<phone') {
-      display: none;
-    }
-
-  }
-}
-
-.folder {
-  th:last-child {
-    @include media('<mini') {
-      width: 40%;
-    }
-  }
-}
-
-.mirror {
-
 }

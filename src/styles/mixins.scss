@@ -1,0 +1,17 @@
+%hide-tablet {
+  @include media('<tablet') {
+    display: none!important;
+  }
+}
+
+%hide-mini {
+  @include media('<mini') {
+    display: none!important;
+  }
+}
+
+%hide-phone {
+  @include media('<phone') {
+    display: none!important;
+  }
+}

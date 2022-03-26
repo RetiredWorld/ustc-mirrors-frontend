@@ -16,8 +16,6 @@ const MyAppWithCtx: FC<{
   const { Component, pageProps } = appProps;
   return (
     <>
-      {/* <Nav /> */}
-      {/* <NavNew /> */}
       <div className={s.container}>
         <Side />
         <Main>
@@ -37,4 +35,5 @@ function MyApp(appProps: AppProps) {
     </ContextWrapper>
   );
 }
+
 export default MyApp;

@@ -32,9 +32,9 @@ const LoadingLayer: FC = () => (
 const FolderHeader: FC = () => (
   <thead className={s.header}>
     <tr>
-      <th>文件夹名称</th>
-      <th>最近更新日期</th>
-      <th>大小</th>
+      <th className={s.name}>文件夹名称</th>
+      <th className={s.date}>最近更新日期</th>
+      <th className={s.size}>大小</th>
     </tr>
   </thead>
 );
@@ -42,13 +42,11 @@ const FolderHeader: FC = () => (
 const MirrorHeader: FC = () => (
   <thead className={s.header}>
     <tr>
-      <th>镜像名称</th>
-      <th>最近更新日期</th>
+      <th className={s.name}>镜像名称</th>
+      <th className={s.date}>最近更新日期</th>
       <th className={s.status}>状态</th>
-      <th className={s.detail}>
-        <span className={s.title}>详情</span>
-      </th>
-      <th className={s.help}>帮助</th>
+      <th>详情</th>
+      <th>帮助</th>
     </tr>
   </thead>
 );
@@ -160,9 +158,7 @@ const MirrorItem: FC<{ item: ISingleMirror; letter?: string }> = ({
       <td>{timeAndStatus.startTime}</td>
       {statusEle}
       <td
-        className={`${s.detail} ${s.icon} ${
-          timeAndStatus.status === `F` ? s.fail : ``
-        }
+        className={`${s.detail} ${timeAndStatus.status === `F` ? s.fail : ``}
         ${timeAndStatus.status === `Y` ? s.syncing : ``}
         ${timeAndStatus.status === `S` ? s.success : ``}
         `}
@@ -266,7 +262,7 @@ export const MirrorItemTable: FC<{
   items: ISingleMirror[];
   isLoading: boolean;
 }> = ({ items, isLoading }) => (
-  <table className={`${s.table} ${s.folder}`}>
+  <table className={`${s.table} ${s.mirror}`}>
     <MirrorHeader />
     {isLoading ? <LoadingLayer /> : <MirrorItemList items={items} />}
   </table>

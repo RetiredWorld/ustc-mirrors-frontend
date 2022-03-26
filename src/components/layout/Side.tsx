@@ -182,7 +182,6 @@ const Mirrors: FC = () => {
       icon={faCompactDisc}
       bg="blue"
       des="这里为您提供各大主流 Linux 发行版的安装镜像 / ISO 文件，请根据您的发行版及其详细版本进行选择"
-      cls={s.flexMirrorsMobile}
       onClick={handleClick}
     />
   );
@@ -216,7 +215,7 @@ const Side: FC = () => {
       <div className={s.flexAbout}>
         <About mobileExpand={mobileExpand} setMobileExpand={setMobileExpand} />
       </div>
-      <div className={`${s.flexMirrors} ${mobileExpand ? s.expand : ``}`}>
+      <div className={s.flexMirrors}>
         <Mirrors />
       </div>
       <div className={s.flexHelps}>
@@ -228,7 +227,7 @@ const Side: FC = () => {
       <div className={s.flexDomains}>
         <Domains />
       </div>
-      <div className={s.flexLinks}>
+      <div className={`${s.flexLinks} ${mobileExpand ? s.expand : ``}`}>
         <Links />
       </div>
     </div>

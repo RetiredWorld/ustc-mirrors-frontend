@@ -7,7 +7,6 @@ $mobile-color: #f5f5f5;
   border-radius: 8px;
   margin: 6px 0;
   transition: .3s;
-  cursor: pointer;
 
   @include media("<=mini") {
     margin: 4px 0 0;
@@ -15,55 +14,32 @@ $mobile-color: #f5f5f5;
   }
 }
 
-.grey {
-  background: #F0F0F0;
-  cursor: auto;
-
-  &:hover {
-    background: #f4f4f4;
-  }
-
-  @include media("<=mini") {
-    background: $mobile-color;
+@each $name, $opts in $side-container-schema {
+  .#{$name} {
+    background: map-get($opts, "color");
 
     &:hover {
-      background: $mobile-color;
+      background: map-get($opts, "color-hover");
+    }
+
+    $mobile-color: map-get($opts, "m-color");
+    $mobile-hover: map-get($opts, "m-hover");
+
+    @include media('<mini') {
+      @if $mobile-color {
+        background: $mobile-color;
+      } @else {
+        background: map-get($side-container-hover-schema, "m-hover");
+      }
+
+      &:hover {
+        @if $mobile-hover {
+          background: $mobile-hover;
+        } @else {
+
+          background: map-get($side-container-hover-schema, "m-hover");
+        }
+      }
     }
   }
-}
-
-.orange {
-  background: #3a6ea3;
-
-  &:hover {
-    background: #4579af;
-  }
-}
-
-.blue {
-  background: #1fa2a9;
-
-  &:hover {
-    background: #3ca8ad;
-  }
-
-  @include media("<=mini") {
-    background: $mobile-color;
-
-    &:hover {
-      background: $mobile-color;
-    }
-  }
-}
-
-.green {
-  background: #4ba376;
-
-  &:hover {
-    background: #4dab7b;
-  }
-}
-
-.transparent {
-  background: transparent;
 }

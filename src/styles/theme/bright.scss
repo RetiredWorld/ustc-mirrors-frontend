@@ -1,0 +1,93 @@
+// `Container.module.scss`
+// container background color schema
+// During UI changing, orange may not represent orange. But I would love to keep it, which will always reminds me of the many quarrels between us.
+$side-container-mobile-color: #f5f5f5;
+$side-container-hover-schema: (
+  m-color: $side-container-mobile-color,
+  m-hover: $side-container-mobile-color,
+);
+$side-container-schema: (
+  ctOrange: (
+    color: #3a6ea3,
+    color-hover: #4579af,
+    m-color: #3a6ea3,
+    m-hover: #4579af,
+  ),
+  ctBlue: (
+    color: #1fa2a9,
+    color-hover: #3ca8ad,
+  ),
+  ctGreen: (
+    color: #4ba376,
+    color-hover: #4dab7b,
+  ),
+  ctGrey: (
+    color: #F0F0F0,
+    color-hover: #f4f4f4,
+  ),
+  ctPure: (
+    color: white,
+    color-hover: white,
+  ),
+);
+
+// `GlobalSearch.module.scss`
+$global-search-icon: #fff;
+$global-search-bg: rgb(136 136 136 / 30%);
+$global-search-shadow: 0 4px 4px 0 rgba(0, 0, 0, 15%);
+$global-search-input: transparent;
+
+// `Header.module.scss`
+$header-bg: white;
+$header-icon-border: 1px black solid;
+$header-search-input-btm: 1px solid grey;
+$header-search-icon: #6b6b6b;
+
+// `ISOPopUp.module.scss`
+$popup-cover: rgba(0, 0, 0, .4);
+$popup-close: grey;
+$popup-close-hover: black;
+$popup-separator: 1px solid #dbdbdb;
+$popup-it: #454545;
+$popup-it-hover: #000000;
+$popup-it-hover-bg: #efefef;
+$popup-active: white;
+$popup-active-bg: #3982cd;
+
+// `Side.module.scss`
+$side-bg: white;
+$side-about-color: white;
+$side-about-border: #6a6a6a;
+$side-close: grey;
+$side-close-hover: black;
+$side-list-title: black;
+$side-icon: white;
+$side-des: rgba(255, 255, 255, .6);
+$side-des-mobile: black;
+$side-special: #65beff;
+$side-special-name: #6a6a6a;
+
+// `ItemList.module.scss`
+$mirror-status-schema: (
+  syncing: (
+    color: orange,
+  ),
+  success: (
+    color: #2fb42f,
+  ),
+  fail: (
+    color: red,
+  )
+);
+$list-th: #555;
+$list-th-bg: rgb(238, 238, 238);
+$list-td: #454545;
+$list-help: #959595;
+$list-tr-hover: #f7f7f7;
+$list-drop-p: #8d8d8d;
+$list-trans: #efefef;
+$list-help: #959595;
+$list-letter: #ccc;
+$list-letter-bf: white;
+$list-letter-line: 2.5px dotted #ccc;
+$list-detail: grey;

@@ -4,15 +4,11 @@
   box-sizing: border-box;
   padding: 20px 25px;
   flex: 2;
+  background-color: $side-bg;
 
   @include media("<=mini") {
-    position: sticky;
-    top: 0;
-    background-color: white;
     z-index: 10;
-
-    padding: 5px 21px;
-    padding-bottom: 0;
+    padding: 5px 21px 0;
   }
 }
 
@@ -36,7 +32,7 @@
   }
 
   &Info {
-    color: white;
+    color: $side-about-color;
   }
 
   &Title {
@@ -66,21 +62,18 @@
     position: absolute;
     right: 25px;
     font-weight: bold;
-    color: grey;
+    color: $side-close;
     transition: .3s;
 
+    @extend %hide-mini;
+
     &:hover {
-      color: black;
+      color: $side-close-hover;
     }
 
     &.close {
       transform: rotate(45deg);
     }
-
-    @include media("<=mini") {
-      display: none;
-    }
-
   }
 
   &Title {
@@ -93,14 +86,12 @@
       zoom: 1.3;
       font-weight: bold;
       margin-right: 8px;
+
+      @extend %hide-mini;
     }
 
     @include media("<=mini") {
-      color: black;
-
-      svg {
-        display: none;
-      }
+      color: $side-list-title;
     }
   }
 
@@ -137,11 +128,11 @@
 
       &:hover {
         text-decoration: underline;
-        color: black;
+        color: $side-list-title;
       }
 
       @include media("<=mini") {
-        color: black;
+        color: $side-list-title;
       }
     }
   }
@@ -151,7 +142,7 @@
   display: flex;
   flex-direction: row;
   align-items: flex-start;
-  color: white;
+  color: $side-icon;
 
   @include media("<=mini") {
     align-items: center;
@@ -161,9 +152,7 @@
   &Large {
     font-size: 35px;
 
-    @include media("<=mini") {
-      display: none;
-    }
+    @extend %hide-mini;
   }
 
   &Text {
@@ -185,21 +174,18 @@
   &Des {
     font-size: 14px;
     line-height: 1.4;
-    color: rgba(255, 255, 255, .6);
+    color: $side-des;
 
-    @include media("<=mini") {
-      display: none;
-    }
+    @extend %hide-mini;
   }
 
   @include media('<mini') {
-    color: black;
+    color: $side-des-mobile;
   }
 }
 
-.flexNews {
+.flexNews, .flexLinks {
   @include media("<=mini") {
-    //display: none;
     overflow: hidden;
     max-height: 0;
     transition: .3s;
@@ -210,7 +196,7 @@
 
     &.expand {
       transition: .5s;
-      max-height: 200px;
+      max-height: 230px;
     }
   }
 
@@ -219,53 +205,10 @@
 .flexMirrors {
   display: flex;
   flex-direction: row;
-
-  @include media("<=mini") {
-    //display: none;
-    overflow: hidden;
-    max-height: 0;
-    transition: .3s;
-
-
-    &.expand {
-      max-height: 300px;
-    }
-  }
-
 }
-
-.flexDomains {
-  @include media("<=mini") {
-    display: none;
-  }
-}
-
-.flexHelps {
-  @include media("<=mini") {
-    display: none;
-  }
-}
-
-.flexLinks {
-  @include media("<=mini") {
-    display: none;
-  }
-}
-
-.flexMirrorsMobile {
-  padding-bottom: 20px;
-}
-
-.flexAboutMobile, .flexMirrorsMobile {
-  @include media("<=mini") {
-    padding: 12px 0px;
-  }
-}
-
 .flexAboutMobile {
-  display: none;
   @include media("<=mini") {
-    margin-left: 6px;
+    padding: 12px 0;
   }
 }
 
@@ -274,35 +217,11 @@
   position: absolute;
   right: 22px;
   top: 14px;
-  color: white;
+  color: $side-about-color;
   font-size: 1.8rem;
 
   @include media('<mini') {
-
     display: block;
-  }
-}
-
-.mobileAbout {
-  display: none;
-  margin-top: -20px;
-  z-index: -1;
-  min-height: 20px;
-  max-height: 0;
-  transition: 1s ease, color 0s;
-  opacity: 0;
-  padding-top: 0;
-  background-color: #325981;
-  color: white;
-  overflow: hidden;
-
-  @include media('<mini') {
-    display: block;
-  }
-
-  &.expand {
-    max-height: 150px;
-    opacity: 1;
   }
 }
 
@@ -313,27 +232,28 @@
 
   @include media('>mini') {
     &:hover {
-      background: white;
-      border-color: #6a6a6a;
+      background: $side-about-color;
+      border-color: $side-about-border;
 
       .special {
         opacity: 1;
-        color: #65beff;
+        color: $side-special;
         transform: rotate(10deg) scale(1.2);
         transition: .8s;
       }
 
       .name {
-        color: #6a6a6a;
+        color: $side-special-name;
       }
-
     }
   }
 
 }
 
 .aboutUs {
-  color: white;
+  color: $side-about-color;
+
+  @extend %hide-mini;
 
   p {
     font-size: 28px;
@@ -357,7 +277,7 @@
     opacity: 0;
     font-size: 25px;
     white-space: nowrap;
-    color: #eeeeee;
+    color: $side-about-color;
     position: absolute;
     top: 0;
     left: 50%;
@@ -366,12 +286,12 @@
     font-family: 'clicker script','segoe script','Comic Sans MS';
   }
 
-  @include media('<mini') {
-    display: none;
-  }
-
 }
 
 .homepageLink {
   text-decoration: none;
+}
+
+.flexDomains, .flexHelps, .flexMirrors {
+  @extend %hide-mini;
 }

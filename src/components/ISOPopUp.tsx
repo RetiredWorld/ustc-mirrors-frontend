@@ -46,7 +46,7 @@ const ISOPopUp: FC = () => {
     <div className={`${s.container} ${ISO.isPop ? s.active : null}`}>
       <div className={s.mask} onClick={handleClose} />
       <div className={s.content}>
-        <Box cls={s.box}>
+        <Box BgClass="pure">
           <div className={s.close} onClick={handleClose}>
             <FontAwesomeIcon icon={faTimes} />
           </div>

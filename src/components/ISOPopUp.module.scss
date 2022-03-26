@@ -14,7 +14,7 @@
     visibility: visible;
     display: block;
     overflow-y: scroll;
-    background-color: rgba(0, 0, 0, .4);
+    background-color: $popup-cover;
   }
 }
 
@@ -22,17 +22,8 @@
   position: relative;
   width: 58%;
   min-width: 380px;
-  margin: 0 auto;
-  margin-top: 4vh;
-  margin-bottom: 10vh;
+  margin: 4vh auto 10vh;
   transition: .3s;
-}
-
-.box {
-  background-color: white;
-  &:hover {
-    background-color: white;
-  }
 }
 
 .close {
@@ -42,11 +33,11 @@
   right: 25px;
   font-size: 1.2rem;
   cursor: pointer;
-  color: grey;
+  color: $popup-close;
   transition: .3s;
 
   &:hover {
-    color: black;
+    color: $popup-close-hover;
   }
 }
 
@@ -59,7 +50,7 @@
     margin-top: 5px;
     padding-bottom: 5px;
     margin-bottom: 13px;
-    border-bottom: 1px solid #dbdbdb;
+    border-bottom: $popup-separator;
   }
 }
 
@@ -84,17 +75,17 @@
     cursor: pointer;
     margin-top: 2px;
     font-weight: bold;
-    color: #454545;
+    color: $popup-it;
 
 
     &:hover {
-      background-color: #efefef;
-      color: #000000;
+      background-color: $popup-it-hover-bg;
+      color: $popup-it-hover;
     }
 
     &.active {
-      background-color: #3982cd;
-      color: white;
+      background-color: $popup-active-bg;
+      color: $popup-active;
 
     }
   }

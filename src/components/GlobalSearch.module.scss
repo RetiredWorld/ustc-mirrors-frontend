@@ -1,6 +1,6 @@
 .icon {
   line-height: 54px;
-  color: white;
+  color: $global-search-icon;
   font-size: 24px;
   width: 54px;
   text-align: center;
@@ -10,14 +10,14 @@
   position: fixed;
   display: flex;
   flex-direction: row-reverse;
-  background-color: rgb(136 136 136 / 30%);
+  background-color: $global-search-bg;
   bottom: 10px;
   right: 8%;
   border-radius: 8px;
   height: 54px;
   min-width: 54px;
   backdrop-filter: blur(30px);
-  box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 15%);
+  box-shadow: $global-search-shadow;
   transition: .3s;
 
   &Active {
@@ -36,7 +36,7 @@
 }
 
 .input input {
-  background-color: rgba(0, 0, 0, 0);
+  background-color: $global-search-input;
   border: none;
   display: block;
   height: 100%;

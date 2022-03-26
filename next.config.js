@@ -19,6 +19,6 @@ module.exports = {
   },
   sassOptions: {
     additionalData:
-      '@import "~include-media/dist/include-media";@import "@/styles/variable.scss";',
+      '@import "~include-media/dist/include-media"; @import "@/styles/variable.scss"; @import "@/styles/mixins.scss"; @import "@/styles/theme.scss";',
   },
 };
