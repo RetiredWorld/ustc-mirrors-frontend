@@ -30,6 +30,12 @@ $drop-height: 38px;
   }
 }
 
+%tb-mobile-last {
+  @include media('<mini') {
+    width: 25%;
+  }
+}
+
 %tb-date {
   @extend %hide-phone;
 
@@ -65,6 +71,12 @@ $drop-height: 38px;
 }
 
 .name {
+  word-break: break-word;
+
+  a {
+    line-height: 1.2;
+  }
+
   @extend %left-br;
 }
 
@@ -92,12 +104,9 @@ $drop-height: 38px;
     // mirror detail
     &:nth-child(4) {
       @extend %right-br;
+      @extend %tb-mobile-last;
 
       text-align: center;
-
-      @include media('<mini') {
-        width: 23%;
-      }
 
       @include media('>=phone') {
         display: none;
@@ -131,6 +140,8 @@ $drop-height: 38px;
     // folder size
     &:last-child {
       @extend %right-br;
+      @extend %tb-mobile-last;
+
       text-align: center;
     }
   }
@@ -168,10 +179,6 @@ $drop-height: 38px;
       color: inherit;
       margin: -5px -10px;
       padding: 5px 10px;
-
-      @include media('<phone') {
-        display: inline;
-      }
     }
   }
 

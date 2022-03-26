@@ -151,7 +151,7 @@ const MirrorItem: FC<{ item: ISingleMirror; letter?: string }> = ({
     }
   }
   const ele = (
-    <tr onClick={handleClick}>
+    <tr>
       <td className={s.name}>
         <Link href={`/files${item.url}/`}>{item.cname}</Link>
       </td>
@@ -162,6 +162,7 @@ const MirrorItem: FC<{ item: ISingleMirror; letter?: string }> = ({
         ${timeAndStatus.status === `Y` ? s.syncing : ``}
         ${timeAndStatus.status === `S` ? s.success : ``}
         `}
+        onClick={handleClick}
       >
         {down ? detailEle : <FontAwesomeIcon icon={faCircleNotch} />}
       </td>
