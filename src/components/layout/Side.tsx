@@ -1,9 +1,9 @@
-import {Dispatch, FC, SetStateAction, useState} from 'react';
+import { Dispatch, FC, SetStateAction, useState } from 'react';
 import Link from 'next/link';
 
-import Box, {IBoxColor} from '@/components/Container';
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-import {IconProp} from '@fortawesome/fontawesome-svg-core';
+import Box, { IBoxColor } from '@/components/Container';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import {
   faBars,
   faCheck,
@@ -13,11 +13,11 @@ import {
   faTimes,
   faTools,
 } from '@fortawesome/free-solid-svg-icons';
-import {ILink, metaConfig, sideConfig} from '@/config';
+import { ILink, metaConfig, sideConfig } from '@/config';
 import s from './Side.module.scss';
 import Logo from '../../../public/logo.svg';
-import {useAppDispatch} from '@/utils/hooks';
-import {changeISODisplay} from '@/context/iso';
+import { useAppDispatch } from '@/utils/hooks';
+import { changeISODisplay } from '@/context/iso';
 
 interface IAbout {
   mobileExpand: boolean;

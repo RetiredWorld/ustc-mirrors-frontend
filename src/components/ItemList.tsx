@@ -278,10 +278,12 @@ export const MirrorItemTable: FC<{
   </table>
 );
 
-export const FolderItemTable: FC<{ items: IFolderItem[]; isLoading: boolean }> =
-  ({ items, isLoading }) => (
-    <table className={`${s.table} ${s.folder}`}>
-      <FolderHeader />
-      {isLoading ? <LoadingLayer /> : <FolderItemList items={items} />}
-    </table>
-  );
+export const FolderItemTable: FC<{
+  items: IFolderItem[];
+  isLoading: boolean;
+}> = ({ items, isLoading }) => (
+  <table className={`${s.table} ${s.folder}`}>
+    <FolderHeader />
+    {isLoading ? <LoadingLayer /> : <FolderItemList items={items} />}
+  </table>
+);

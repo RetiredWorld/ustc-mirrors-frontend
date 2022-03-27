@@ -21,7 +21,7 @@ export default function Home() {
         dispatch(updateISOList(data.info));
       }
     }
-  }, [data]);
+  }, [data, ISO.iso.length, dispatch]);
 
   return (
     <div>

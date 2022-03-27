@@ -1,4 +1,4 @@
-import { IISO } from '@/context/ISOContext';
+import { IISO } from '@/context/iso';
 
 export interface ISingleMirror {
   cname: string;
