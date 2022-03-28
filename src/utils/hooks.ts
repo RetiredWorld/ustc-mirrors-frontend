@@ -5,6 +5,7 @@ import { AppDispatch, RootState } from '@/context/store';
 import { useRouter } from 'next/router';
 import path from 'path';
 import { useEffect, useState } from 'react';
+import { sortFolder, sortMirror } from '@/utils/index';
 
 // hooks for redux
 export const useAppDispatch = () => useDispatch<AppDispatch>();
@@ -25,7 +26,8 @@ export function useFilterMirror(
       filteredMirrorList = mirrorList;
     }
   }
-  return filteredMirrorList;
+
+  return sortMirror(filteredMirrorList, search.order);
 }
 
 // filter folder and sort
@@ -43,7 +45,8 @@ export function useFilterFolder(
       filteredFolderList = folderList;
     }
   }
-  return filteredFolderList;
+
+  return sortFolder(filteredFolderList, search.order);
 }
 
 // get router path

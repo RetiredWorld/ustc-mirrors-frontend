@@ -1,15 +1,25 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-type Order = 'name' | 'size' | 'date' | '-name' | '-size' | '-date';
+export enum Order {
+  nameRev = -4,
+  statusRev,
+  dateRev,
+  sizeRev,
+  none,
+  name,
+  status,
+  date,
+  size,
+}
 
 export type ISearch = {
   keyword: string;
-  order?: Order;
+  order: Order;
 };
 
 const initialState: ISearch = {
   keyword: ``,
-  order: `name`,
+  order: Order.none,
 };
 
 export const searchSlice = createSlice({
@@ -23,7 +33,17 @@ export const searchSlice = createSlice({
       state.keyword = action.payload;
     },
     setOrder(state, action: PayloadAction<Order>) {
-      state.order = action.payload;
+      let order = action.payload;
+      if (state.order === Order.none && order === Order.name) {
+        state.order = action.payload - 5;
+        return;
+      }
+      if (state.order === order || state.order + 5 === order) {
+        if (state.order > 0) {
+          order -= 5;
+        }
+      }
+      state.order = order;
     },
   },
 });

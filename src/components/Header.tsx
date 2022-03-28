@@ -19,19 +19,19 @@ const HeaderBread: FC = () => {
 
   function genFolder(folderItem: IRouterPath) {
     return (
-      <>
+      <span key={folderItem.path}>
         {` `}/{` `}
-        <Link key={folderItem.path} href={folderItem.path}>
-          {folderItem.name}
-        </Link>
-      </>
+        <Link href={folderItem.path}>{folderItem.name}</Link>
+      </span>
     );
   }
   return (
     <span className={s.bread}>
       {folderPath && folderPath.length !== 0 ? (
         <>
-          <Link href="/">Home</Link>
+          <span>
+            <Link href="/">Home</Link>
+          </span>
           {folderPath.length <= 4 ? (
             folderPath.map(genFolder)
           ) : (
@@ -43,7 +43,9 @@ const HeaderBread: FC = () => {
           )}
         </>
       ) : (
-        <Link href={metaConfig.domainLink}>{metaConfig.domain}</Link>
+        <span>
+          <Link href={metaConfig.domainLink}>{metaConfig.domain}</Link>
+        </span>
       )}
     </span>
   );

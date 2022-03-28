@@ -1,25 +1,25 @@
 import { FC, useCallback, useEffect, useRef, useState } from 'react';
 import { ISingleMirror } from '@/types/mirror';
-import {
-  folderURLRewrite,
-  formatDate,
-  formatSize,
-  parseTimeAndStatus,
-} from '@/utils';
+import { folderURLRewrite, formatDate, formatSize } from '@/utils';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Link from 'next/link';
 import {
   faCheckCircle,
   faCircleNotch,
+  faCircleQuestion,
   faSort,
+  faSortDown,
+  faSortUp,
   faSync,
   faTimesCircle,
 } from '@fortawesome/free-solid-svg-icons';
 import { IFolderItem } from '@/types/folder';
 import { useRouter } from 'next/router';
 import path from 'path';
-import { useRouterPath } from '@/utils/hooks';
+import { useAppDispatch, useAppSelector, useRouterPath } from '@/utils/hooks';
 import s from './ItemList.module.scss';
+import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
+import { Order, setOrder } from '@/context/search';
 
 const LoadingLayer: FC = () => (
   <tbody>
@@ -31,45 +31,114 @@ const LoadingLayer: FC = () => (
   </tbody>
 );
 
-const FolderHeader: FC = () => (
-  <thead className={s.header}>
+const EmptyLayer: FC = () => (
+  <tbody>
     <tr>
-      <th className={s.name}>
-        文件名称
-        <FontAwesomeIcon icon={faSort} />
-      </th>
-      <th className={s.date}>
-        最近更新日期
-        <FontAwesomeIcon icon={faSort} />
-      </th>
-      <th className={s.size}>
-        大小
-        <FontAwesomeIcon icon={faSort} />
-      </th>
+      <td>
+        <div className={s.empty}>dir is empty</div>
+      </td>
     </tr>
-  </thead>
+  </tbody>
 );
 
-const MirrorHeader: FC = () => (
-  <thead className={s.header}>
-    <tr>
-      <th className={s.name}>
-        镜像名称
-        <FontAwesomeIcon icon={faSort} />
-      </th>
-      <th className={s.date}>
-        最近更新日期
-        <FontAwesomeIcon icon={faSort} />
-      </th>
-      <th className={s.status}>
-        状态
-        <FontAwesomeIcon icon={faSort} />
-      </th>
-      <th>详情</th>
-      <th>帮助</th>
-    </tr>
-  </thead>
-);
+const FolderHeader: FC = () => {
+  const order = useAppSelector((state) => state.search.order);
+  const dispatch = useAppDispatch();
+  return (
+    <thead className={s.header}>
+      <tr>
+        <th className={s.name} onClick={() => dispatch(setOrder(Order.name))}>
+          文件名称
+          <FontAwesomeIcon
+            icon={
+              order === Order.name || order === Order.nameRev
+                ? order < 0
+                  ? faSortDown
+                  : faSortUp
+                : faSort
+            }
+          />
+        </th>
+        <th className={s.date} onClick={() => dispatch(setOrder(Order.date))}>
+          最近更新日期
+          <FontAwesomeIcon
+            icon={
+              order === Order.date || order === Order.dateRev
+                ? order < 0
+                  ? faSortDown
+                  : faSortUp
+                : faSort
+            }
+          />
+        </th>
+        <th className={s.size} onClick={() => dispatch(setOrder(Order.size))}>
+          大小
+          <FontAwesomeIcon
+            icon={
+              order === Order.size || order === Order.sizeRev
+                ? order < 0
+                  ? faSortDown
+                  : faSortUp
+                : faSort
+            }
+          />
+        </th>
+      </tr>
+    </thead>
+  );
+};
+
+const MirrorHeader: FC = () => {
+  const order = useAppSelector((state) => state.search.order);
+  const dispatch = useAppDispatch();
+  return (
+    <thead className={s.header}>
+      <tr>
+        <th className={s.name} onClick={() => dispatch(setOrder(Order.name))}>
+          镜像名称
+          <FontAwesomeIcon
+            icon={
+              order === Order.name || order === Order.nameRev
+                ? order < 0
+                  ? faSortDown
+                  : faSortUp
+                : faSort
+            }
+          />
+        </th>
+        <th className={s.date} onClick={() => dispatch(setOrder(Order.date))}>
+          最近更新日期
+          <FontAwesomeIcon
+            icon={
+              order === Order.date || order === Order.dateRev
+                ? order < 0
+                  ? faSortDown
+                  : faSortUp
+                : faSort
+            }
+          />
+        </th>
+        <th
+          className={s.status}
+          onClick={() => dispatch(setOrder(Order.status))}
+        >
+          状态
+          <FontAwesomeIcon
+            icon={
+              order === Order.status || order === Order.statusRev
+                ? order < 0
+                  ? faSortDown
+                  : faSortUp
+                : faSort
+            }
+          />
+        </th>
+        <th>详情</th>
+        <th>帮助</th>
+      </tr>
+    </thead>
+  );
+};
 
 const MirrorItemDrop: FC<{
   item: ISingleMirror;
@@ -83,11 +152,10 @@ const MirrorItemDrop: FC<{
     }
   }, [down]);
   if (down) {
-    const timeAndStatus = parseTimeAndStatus(item);
     ele = (
       <tr className={s.drop} ref={dropEleRef}>
         <td className={s.dropEle}>
-          <p>最后更新: {timeAndStatus.startTime}</p>
+          <p>最后更新: {item.status.startTime}</p>
           {item.help ? (
             <p>
               <a className={s.help} href={item.help}>
@@ -106,85 +174,71 @@ const MirrorItemDrop: FC<{
   return ele;
 };
 
+interface IStatusMap {
+  [key: string]: {
+    className: string;
+    text: string;
+    icon: IconDefinition;
+  };
+}
+
+const statusMap: IStatusMap = {
+  Y: {
+    className: s.syncing,
+    text: `同步中`,
+    icon: faSync,
+  },
+  S: {
+    className: s.success,
+    text: `成功`,
+    icon: faCheckCircle,
+  },
+  F: {
+    className: s.fail,
+    text: `失败`,
+    icon: faTimesCircle,
+  },
+  U: {
+    className: s.unknown,
+    text: `未知`,
+    icon: faCircleQuestion,
+  },
+};
+
 const MirrorItem: FC<{ item: ISingleMirror; letter?: string }> = ({
   item,
   letter,
 }) => {
   const [down, setDown] = useState<boolean>(false);
+  const search = useAppSelector((state) => state.search);
 
   const handleClick = useCallback(() => {
     setDown((prevState) => !prevState);
   }, []);
-  const timeAndStatus = parseTimeAndStatus(item);
-  let statusEle: JSX.Element;
-  let detailEle: JSX.Element;
-  switch (timeAndStatus.status) {
-    case `Y`: {
-      statusEle = (
-        <td className={`${s.syncing} ${s.status}`}>
-          <FontAwesomeIcon icon={faSync} />
-        </td>
-      );
-      detailEle = (
-        <span>
-          <FontAwesomeIcon icon={faSync} />
-          同步中
-        </span>
-      );
-      break;
-    }
-    case `S`: {
-      statusEle = (
-        <td className={`${s.success} ${s.status}`}>
-          <FontAwesomeIcon icon={faCheckCircle} />
-        </td>
-      );
-      detailEle = (
-        <span>
-          <FontAwesomeIcon icon={faCheckCircle} />
-          成功
-        </span>
-      );
-      break;
-    }
-    case `F`: {
-      statusEle = (
-        <td className={`${s.fail} ${s.status}`}>
-          <FontAwesomeIcon icon={faTimesCircle} />
-        </td>
-      );
-      detailEle = (
-        <span>
-          <FontAwesomeIcon icon={faTimesCircle} />
-          失败
-        </span>
-      );
-      break;
-    }
-    default: {
-      statusEle = (
-        <td className={`${s.fail} ${s.status}`}>
-          <FontAwesomeIcon icon={faTimesCircle} />
-        </td>
-      );
-      detailEle = <span>未知</span>;
-    }
+  let status = statusMap[item.status.status];
+  if (status === undefined) {
+    status = statusMap.U;
   }
   const ele = (
     <tr>
       <td className={s.name}>
         <Link href={`/files${item.url}/`}>{item.cname}</Link>
       </td>
-      <td>{timeAndStatus.startTime}</td>
-      {statusEle}
-      <td
-        className={`${s.detail} ${timeAndStatus.status === `F` ? s.fail : ``}
-        ${timeAndStatus.status === `Y` ? s.syncing : ``}
-        ${timeAndStatus.status === `S` ? s.success : ``}
-        `}
-        onClick={handleClick}
-      >
-        {down ? detailEle : <FontAwesomeIcon icon={faCircleNotch} />}
+      <td>{item.status.startTime}</td>
+      <td className={`${status.className} ${s.status}`}>
+        <a href="/status">
+          <FontAwesomeIcon icon={status.icon} />
+        </a>
+      </td>
+      <td className={`${s.detail} ${status.className}`} onClick={handleClick}>
+        {down ? (
+          <span>
+            <FontAwesomeIcon icon={status.icon} />
+            {status.text}
+          </span>
+        ) : (
+          <FontAwesomeIcon icon={faCircleNotch} />
+        )}
       </td>
       <td className={s.help}>
         <a href={item.help} className={s.help}>
@@ -196,7 +250,12 @@ const MirrorItem: FC<{ item: ISingleMirror; letter?: string }> = ({
 
   return (
     <>
-      {letter ? <tr className={s.letter}>{letter}</tr> : null}
+      {letter &&
+      (search.order === Order.name || search.order === Order.nameRev) ? (
+        <tr className={s.letter}>
+          <td>{letter}</td>
+        </tr>
+      ) : null}
       {ele}
       <MirrorItemDrop item={item} down={down} />
     </>
@@ -274,7 +333,13 @@ export const MirrorItemTable: FC<{
 }> = ({ items, isLoading }) => (
   <table className={`${s.table} ${s.mirror}`}>
     <MirrorHeader />
-    {isLoading ? <LoadingLayer /> : <MirrorItemList items={items} />}
+    {isLoading ? (
+      <LoadingLayer />
+    ) : items.length === 0 ? (
+      <EmptyLayer />
+    ) : (
+      <MirrorItemList items={items} />
+    )}
   </table>
 );
 
@@ -284,6 +349,12 @@ export const FolderItemTable: FC<{
 }> = ({ items, isLoading }) => (
   <table className={`${s.table} ${s.folder}`}>
     <FolderHeader />
-    {isLoading ? <LoadingLayer /> : <FolderItemList items={items} />}
+    {isLoading ? (
+      <LoadingLayer />
+    ) : items.length === 0 ? (
+      <EmptyLayer />
+    ) : (
+      <FolderItemList items={items} />
+    )}
   </table>
 );

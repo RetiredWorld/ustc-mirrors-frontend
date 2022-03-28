@@ -4,6 +4,16 @@ export interface ISingleMirror {
   cname: string;
   desc: string;
   url: string;
+  status: IMirrorStatus;
+  help: string;
+  upstream: string;
+  size?: string;
+}
+
+export interface IRawMirror {
+  cname: string;
+  desc: string;
+  url: string;
   status: string;
   help: string;
   upstream: string;
@@ -15,7 +25,7 @@ export interface IMirror {
   endpoints: any[];
   site: any;
   info: IISO[];
-  mirrors: ISingleMirror[];
+  mirrors: IRawMirror[];
 }
 
 export interface IMirrorStatus {

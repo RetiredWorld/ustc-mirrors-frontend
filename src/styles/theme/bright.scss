@@ -77,7 +77,10 @@ $mirror-status-schema: (
   ),
   fail: (
     color: red,
-  )
+  ),
+  unknown: (
+    color: #454545,
+)
 );
 $list-th: #555;
 $list-th-bg: rgb(238, 238, 238);

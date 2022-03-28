@@ -2,15 +2,23 @@ import { ChangeEvent, FC, useCallback, useEffect, useRef } from 'react';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
-import { setKeyword } from '@/context/search';
+import { clearKeyword, setKeyword } from '@/context/search';
 import { useAppDispatch, useAppSelector } from '@/utils/hooks';
 import s from './GlobalSearch.module.scss';
+import { useRouter } from 'next/router';
 
 const GlobalSearch: FC = () => {
   const containerEle = useRef<HTMLDivElement>(null);
   const inputEle = useRef<HTMLInputElement>(null);
   const keyword = useAppSelector((state) => state.search.keyword);
   const dispatch = useAppDispatch();
+  const router = useRouter();
+
+  useEffect(() => {
+    router.events.on(`routeChangeStart`, () => {
+      dispatch(clearKeyword());
+    });
+  }, [router.events, dispatch]);
 
   const handleClick = () => {
     const ele = containerEle.current;

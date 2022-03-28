@@ -1,5 +1,7 @@
-import { IMirrorStatus, ISingleMirror } from '@/types/mirror';
+import { IMirrorStatus, IRawMirror, ISingleMirror } from '@/types/mirror';
 import path from 'path';
+import { Order } from '@/context/search';
+import { IFolderItem } from '@/types/folder';
 
 // rewrite folder url to match exact location of file and folder
 export function folderURLRewrite(
@@ -42,7 +44,7 @@ export function formatDate(dateStr: string, unix = true): string {
 }
 
 // parse mirrorz time and sync status
-export function parseTimeAndStatus(mirrorObj: ISingleMirror): IMirrorStatus {
+export function parseTimeAndStatus(mirrorObj: IRawMirror): IMirrorStatus {
   const status = mirrorObj.status.match(/[A-Z](\d+)?/g);
   const formattedStatus: IMirrorStatus = {
     status: ``,
@@ -54,7 +56,7 @@ export function parseTimeAndStatus(mirrorObj: ISingleMirror): IMirrorStatus {
   };
 
   if (status) {
-    status.forEach((stat) => {
+    status.forEach((stat: string) => {
       const flag: string = stat.slice(0, 1);
       switch (flag) {
         case `S`: {
@@ -136,4 +138,102 @@ export function formatSize(size: number | undefined) {
     return `${sz.toFixed(1)} ${units[u]}`;
   }
   return `-`;
+}
+
+// sort mirror
+const statusOrderList = [`S`, `Y`, `P`, `C`, `R`, `U`, `F`];
+export function sortMirror(
+  mirrorList: ISingleMirror[],
+  order: Order,
+): ISingleMirror[] {
+  const sortedMrList: ISingleMirror[] = [...mirrorList];
+  switch (order) {
+    case Order.nameRev:
+    case Order.name: {
+      sortedMrList.sort((a, b) => {
+        const res = a.cname.localeCompare(b.cname);
+        return order === Order.name ? res : -res;
+      });
+      break;
+    }
+    case Order.dateRev:
+    case Order.date: {
+      sortedMrList.sort((a, b) => {
+        if (!a.status.startTime) {
+          return 1;
+        } else if (!b.status.startTime) {
+          return -1;
+        }
+        const res = a.status.startTime > b.status.startTime ? -1 : 1;
+        return order === Order.date ? res : -res;
+      });
+      break;
+    }
+    case Order.statusRev:
+    case Order.status: {
+      sortedMrList.sort((a, b) => {
+        const aIdx = statusOrderList.indexOf(a.status.status);
+        const bIdx = statusOrderList.indexOf(b.status.status);
+        return order === Order.status ? aIdx - bIdx : bIdx - aIdx;
+      });
+      break;
+    }
+    default: {
+    }
+  }
+  return sortedMrList;
+}
+
+// sort folder
+export function sortFolder(
+  folderList: IFolderItem[],
+  order: Order,
+): IFolderItem[] {
+  const sortedFolders = [...folderList];
+  switch (order) {
+    case Order.nameRev:
+    case Order.name: {
+      sortedFolders.sort((a, b) => {
+        const res = a.name.localeCompare(b.name);
+        if (a.type !== b.type) {
+          if (a.type === `directory`) {
+            return -1;
+          } else {
+            return 1;
+          }
+        }
+        return order === Order.name ? res : -res;
+      });
+      break;
+    }
+    case Order.dateRev:
+    case Order.date: {
+      sortedFolders.sort((a, b) => {
+        if (!a.mtime) {
+          return 1;
+        } else if (!b.mtime) {
+          return -1;
+        }
+        const res = a.mtime > b.mtime ? -1 : 1;
+        return order === Order.date ? res : -res;
+      });
+      break;
+    }
+    case Order.sizeRev:
+    case Order.size: {
+      sortedFolders.sort((a, b) => {
+        if (!a.size) {
+          return 1;
+        } else if (!b.size) {
+          return -1;
+        }
+        const res = a.size - b.size;
+        return order === Order.sizeRev ? res : -res;
+      });
+      break;
+    }
+    default: {
+    }
+  }
+  return sortedFolders;
 }
