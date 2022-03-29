@@ -1,4 +1,4 @@
-import { ChangeEvent, FC } from 'react';
+import { ChangeEvent, FC, useEffect, useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import Link from 'next/link';
@@ -54,9 +54,26 @@ const HeaderBread: FC = () => {
 const HeaderIndex: FC = () => {
   const keyword = useAppSelector((state) => state.search.keyword);
   const dispatch = useAppDispatch();
+  const inputRef = useRef<HTMLInputElement>(null);
   function handleInput(e: ChangeEvent<HTMLInputElement>) {
     dispatch(setKeyword(e.target.value || ``));
   }
+  useEffect(() => {
+    function handleKeyStroke(e: KeyboardEvent) {
+      if (e.key === `S`) {
+        if (e.target === document.body) {
+          e.preventDefault();
+        }
+        if (inputRef.current) {
+          inputRef.current.focus();
+        }
+      }
+    }
+    document.addEventListener(`keydown`, handleKeyStroke);
+    return () => {
+      document.removeEventListener(`keydown`, handleKeyStroke);
+    };
+  }, []);
   return (
     <div className={s.indexContainer}>
       <div className={s.index}>
@@ -70,14 +87,19 @@ const HeaderIndex: FC = () => {
             <Link href={metaConfig.domainLink} passHref>
               <h2 className={s.indexTitle}>{metaConfig.siteName}</h2>
             </Link>
-            <h2 className={s.indexTitleMobile}>文件列表</h2>
             <div className={s.indexDes}>
               <HeaderBread />
             </div>
           </div>
         </div>
         <div className={s.indexSearch}>
-          <input id="idx-search" onChange={handleInput} value={keyword || ``} />
+          <input
+            id="idx-search"
+            ref={inputRef}
+            onChange={handleInput}
+            placeholder="按下 S 过滤"
+            value={keyword || ``}
+          />
           <FontAwesomeIcon icon={faSearch} />
         </div>
       </div>

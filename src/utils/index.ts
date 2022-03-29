@@ -141,7 +141,7 @@ export function formatSize(size: number | undefined) {
 }
 
 // sort mirror
-const statusOrderList = [`S`, `Y`, `P`, `C`, `R`, `U`, `F`];
+const statusOrderList = [`S`, `P`, `C`, `R`, `U`, `Y`, `F`];
 export function sortMirror(
   mirrorList: ISingleMirror[],
   order: Order,
@@ -228,7 +228,7 @@ export function sortFolder(
           return -1;
         }
         const res = a.size - b.size;
-        return order === Order.sizeRev ? res : -res;
+        return order === Order.sizeRev ? -res : res;
       });
       break;
     }

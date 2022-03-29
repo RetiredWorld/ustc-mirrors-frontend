@@ -65,6 +65,26 @@ export const sideConfig: ISideConfig = {
       },
     ],
   },
+  revProxies: {
+    enable: true,
+    list: [
+      [`registry-1.docker.io`, `docker.mirrors.ustc.edu.cn (ustcnet only)`],
+      [`packages.elastic.co`, `elastic.proxy.ustclug.org`],
+      [`ppa.launchpad.net`, `launchpad.proxy.ustclug.org`],
+      [`downloads.openwrt.org`, `openwrt.proxy.ustclug.org`],
+      [`registry.npmjs.org`, `npmreg.proxy.ustclug.org`],
+      [`www.npmjs.com`, `npm.proxy.ustclug.org`],
+      [`ajax.googleapis.com`, `ajax.proxy.ustclug.org`],
+      [`themes.googleusercontent.com`, `google-themes.proxy.ustclug.org`],
+      [`repo.typesafe.com`, `typesafe.proxy.ustclug.org`],
+      [`repo1.maven.org`, `maven.proxy.ustclug.org`],
+      [`repo.scala-sbt.org`, `scala-sbt.proxy.ustclug.org`],
+      [
+        `kubernetes-charts.storage.googleapis.com`,
+        `kubernetes-charts.proxy.ustclug.org`,
+      ],
+    ],
+  },
   links: {
     enable: true,
     initClose: true,
@@ -162,6 +182,10 @@ interface ISideConfig {
     enable: boolean;
     initClose?: boolean;
     links: ILink[];
+  };
+  revProxies: {
+    enable: boolean;
+    list: [string, string][];
   };
   helps: {
     enable: boolean;

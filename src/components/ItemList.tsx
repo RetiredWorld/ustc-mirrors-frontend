@@ -7,6 +7,7 @@ import {
   faCheckCircle,
   faCircleNotch,
   faCircleQuestion,
+  faFolderOpen,
   faSort,
   faSortDown,
   faSortUp,
@@ -20,26 +21,50 @@ import { useAppDispatch, useAppSelector, useRouterPath } from '@/utils/hooks';
 import s from './ItemList.module.scss';
 import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 import { Order, setOrder } from '@/context/search';
+import { metaConfig } from '@/config';
 
 const LoadingLayer: FC = () => (
-  <tbody>
-    <tr>
-      <td>
-        <div className={s.loading}>loading</div>
-      </td>
-    </tr>
-  </tbody>
+  <div className={s.loading}>
+    <div className={s.loadingIcon} />
+    <div className={s.loadingTxt}>
+      <p className={s.loadingText}>加载中···</p>
+      <p className={s.loadingLogo}>
+        {metaConfig.logo.small} {metaConfig.logo.large}
+      </p>
+    </div>
+  </div>
 );
 
 const EmptyLayer: FC = () => (
-  <tbody>
-    <tr>
-      <td>
-        <div className={s.empty}>dir is empty</div>
-      </td>
-    </tr>
-  </tbody>
+  <div className={s.empty}>
+    <div className={s.emptyIcon}>
+      <FontAwesomeIcon icon={faFolderOpen} size={`2x`} />
+    </div>
+    <div className={s.emptyTxt}>
+      <p className={s.emptyText}>没有内容</p>
+      <p className={s.emptyLogo}>
+        {metaConfig.logo.small} {metaConfig.logo.large}
+      </p>
+    </div>
+  </div>
 );
+
+const SortIcon: FC<{ order: boolean; enable?: boolean }> = ({
+  order,
+  enable,
+}) => {
+  return (
+    <span className={s.sort}>
+      <FontAwesomeIcon className={s.sortHide} icon={faSort} />
+      {enable ? (
+        <FontAwesomeIcon
+          className={s.sortFront}
+          icon={order ? faSortUp : faSortDown}
+        />
+      ) : null}
+    </span>
+  );
+};
 
 const FolderHeader: FC = () => {
   const order = useAppSelector((state) => state.search.order);
@@ -49,38 +74,23 @@ const FolderHeader: FC = () => {
       <tr>
         <th className={s.name} onClick={() => dispatch(setOrder(Order.name))}>
           文件名称
-          <FontAwesomeIcon
-            icon={
-              order === Order.name || order === Order.nameRev
-                ? order < 0
-                  ? faSortDown
-                  : faSortUp
-                : faSort
-            }
+          <SortIcon
+            order={order > 0}
+            enable={order === Order.name || order === Order.nameRev}
           />
         </th>
         <th className={s.date} onClick={() => dispatch(setOrder(Order.date))}>
           最近更新日期
-          <FontAwesomeIcon
-            icon={
-              order === Order.date || order === Order.dateRev
-                ? order < 0
-                  ? faSortDown
-                  : faSortUp
-                : faSort
-            }
+          <SortIcon
+            order={order > 0}
+            enable={order === Order.date || order === Order.dateRev}
           />
         </th>
         <th className={s.size} onClick={() => dispatch(setOrder(Order.size))}>
           大小
-          <FontAwesomeIcon
-            icon={
-              order === Order.size || order === Order.sizeRev
-                ? order < 0
-                  ? faSortDown
-                  : faSortUp
-                : faSort
-            }
+          <SortIcon
+            order={order > 0}
+            enable={order === Order.size || order === Order.sizeRev}
           />
         </th>
       </tr>
@@ -96,26 +106,16 @@ const MirrorHeader: FC = () => {
       <tr>
         <th className={s.name} onClick={() => dispatch(setOrder(Order.name))}>
           镜像名称
-          <FontAwesomeIcon
-            icon={
-              order === Order.name || order === Order.nameRev
-                ? order < 0
-                  ? faSortDown
-                  : faSortUp
-                : faSort
-            }
+          <SortIcon
+            order={order > 0}
+            enable={order === Order.name || order === Order.nameRev}
           />
         </th>
         <th className={s.date} onClick={() => dispatch(setOrder(Order.date))}>
           最近更新日期
-          <FontAwesomeIcon
-            icon={
-              order === Order.date || order === Order.dateRev
-                ? order < 0
-                  ? faSortDown
-                  : faSortUp
-                : faSort
-            }
+          <SortIcon
+            order={order > 0}
+            enable={order === Order.date || order === Order.dateRev}
           />
         </th>
         <th
@@ -123,14 +123,9 @@ const MirrorHeader: FC = () => {
           onClick={() => dispatch(setOrder(Order.status))}
         >
           状态
-          <FontAwesomeIcon
-            icon={
-              order === Order.status || order === Order.statusRev
-                ? order < 0
-                  ? faSortDown
-                  : faSortUp
-                : faSort
-            }
+          <SortIcon
+            order={order > 0}
+            enable={order === Order.status || order === Order.statusRev}
           />
         </th>
         <th>详情</th>
@@ -251,7 +246,9 @@ const MirrorItem: FC<{ item: ISingleMirror; letter?: string }> = ({
   return (
     <>
       {letter &&
-      (search.order === Order.name || search.order === Order.nameRev) ? (
+      (search.order === Order.name ||
+        search.order === Order.nameRev ||
+        search.order === Order.none) ? (
         <tr className={s.letter}>
           <td>{letter}</td>
         </tr>
@@ -331,30 +328,26 @@ export const MirrorItemTable: FC<{
   items: ISingleMirror[];
   isLoading: boolean;
 }> = ({ items, isLoading }) => (
-  <table className={`${s.table} ${s.mirror}`}>
-    <MirrorHeader />
-    {isLoading ? (
-      <LoadingLayer />
-    ) : items.length === 0 ? (
-      <EmptyLayer />
-    ) : (
+  <>
+    <table className={`${s.table} ${s.mirror}`}>
+      <MirrorHeader />
       <MirrorItemList items={items} />
-    )}
-  </table>
+    </table>
+    {isLoading ? <LoadingLayer /> : null}
+    {!isLoading && items.length === 0 ? <EmptyLayer /> : null}
+  </>
 );
 
 export const FolderItemTable: FC<{
   items: IFolderItem[];
   isLoading: boolean;
 }> = ({ items, isLoading }) => (
-  <table className={`${s.table} ${s.folder}`}>
-    <FolderHeader />
-    {isLoading ? (
-      <LoadingLayer />
-    ) : items.length === 0 ? (
-      <EmptyLayer />
-    ) : (
+  <>
+    <table className={`${s.table} ${s.folder}`}>
+      <FolderHeader />
       <FolderItemList items={items} />
-    )}
-  </table>
+    </table>
+    {isLoading ? <LoadingLayer /> : null}
+    {!isLoading && items.length === 0 ? <EmptyLayer /> : null}
+  </>
 );

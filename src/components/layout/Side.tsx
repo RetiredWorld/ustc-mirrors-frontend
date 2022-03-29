@@ -195,6 +195,10 @@ const Helps: FC = () =>
     />
   ) : null;
 
+const Proxies: FC = () => {
+  return <>proxies</>;
+};
+
 const Links: FC = () =>
   sideConfig.links.enable ? (
     <ListSide
@@ -227,6 +231,9 @@ const Side: FC = () => {
       </div>
       <div className={`${s.flexLinks} ${mobileExpand ? s.expand : ``}`}>
         <Links />
+      </div>
+      <div>
+        <Proxies />
       </div>
     </div>
   );

@@ -205,7 +205,7 @@ $drop-height: 38px;
   @each $name, $opts in $mirror-status-schema {
     .#{$name} {
       text-align: center;
-      zoom: 0.8;
+      transform: scale(0.8);
       color: map-get($opts, "color");
     }
   }
@@ -337,7 +337,7 @@ $drop-height: 38px;
 
 .detail {
   color: $list-detail;
-  zoom: .8;
+  transform: scale(.8);
 
   .title {
     margin-right: 6px;
@@ -357,7 +357,77 @@ $drop-height: 38px;
   }
 }
 
-.loading {
-  color: red;
+.loading, .empty {
+  color: $list-loading;
+  text-align: center;
+  margin-top: 40px;
+  display: flex;
+  justify-content: center;
+
+  &Icon {
+    margin-top: 8px;
+    margin-right: 4px;
+  }
+
+  &Text {
+    font-weight: bold;
+    font-size: 1.6rem;
+  }
+
+  &Logo {
+    position: relative;
+    left: -12px;
+    font-size: .8rem;
+    letter-spacing: 1px;
+    margin-top: -8px;
+  }
 }
 
+.loading {
+  opacity: 0;
+  animation: loading 3s infinite;
+}
+
+.empty {
+  animation-delay: .2s;
+  animation: trans .5s;
+}
+
+@keyframes trans {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes loading {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.sort {
+  position: relative;
+  margin-left: 3px;
+
+  svg {
+    position: absolute;
+    top: 2px;
+  }
+
+  &Front {
+    color: $list-sort;
+  }
+
+  &Hide {
+    color: $list-sort-hide;
+  }
+}

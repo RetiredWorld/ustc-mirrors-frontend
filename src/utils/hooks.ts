@@ -20,7 +20,7 @@ export function useFilterMirror(
   if (mirrorList) {
     if (search.keyword !== ``) {
       filteredMirrorList = mirrorList.filter((mirror) =>
-        mirror.cname.toLowerCase().includes(search.keyword),
+        mirror.cname.toLowerCase().includes(search.keyword.toLowerCase()),
       );
     } else {
       filteredMirrorList = mirrorList;
@@ -39,7 +39,7 @@ export function useFilterFolder(
   if (folderList) {
     if (search.keyword !== ``) {
       filteredFolderList = folderList.filter((folder) =>
-        folder.name.toLowerCase().includes(search.keyword),
+        folder.name.toLowerCase().includes(search.keyword.toLowerCase()),
       );
     } else {
       filteredFolderList = folderList;
